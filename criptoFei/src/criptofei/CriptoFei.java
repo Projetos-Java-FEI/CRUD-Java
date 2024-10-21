@@ -1,11 +1,11 @@
 package criptofei;
-import view.JanelaInicial;
+import view.Login;
 import model.User;
 
 public class CriptoFei {
 
     public static void main(String[] args) {
-        JanelaInicial jInicial = new JanelaInicial();
+        Login jInicial = new Login();
         jInicial.setVisible(true);
         
         
