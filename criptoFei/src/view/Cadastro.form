@@ -33,14 +33,14 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblUsuario" min="-2" pref="70" max="-2" attributes="0"/>
+                          <Component id="lblCPF" min="-2" pref="70" max="-2" attributes="0"/>
                           <Component id="lblNome" min="-2" pref="70" max="-2" attributes="0"/>
                           <Component id="lblSenha" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
                           <Group type="102" alignment="0" attributes="0">
                               <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="txtCadastroNome" max="32767" attributes="0"/>
-                                  <Component id="txtCadastroUsuario" max="32767" attributes="0"/>
+                                  <Component id="txtCadastroCPF" max="32767" attributes="0"/>
                                   <Component id="txtCadastroSenha" max="32767" attributes="0"/>
                                   <Component id="btnCadastrar" alignment="0" min="-2" pref="247" max="-2" attributes="0"/>
                               </Group>
@@ -67,9 +67,9 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="txtCadastroNome" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="lblUsuario" min="-2" max="-2" attributes="0"/>
+              <Component id="lblCPF" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="txtCadastroUsuario" min="-2" pref="38" max="-2" attributes="0"/>
+              <Component id="txtCadastroCPF" min="-2" pref="38" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="lblSenha" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -100,16 +100,16 @@
         <Property name="actionCommand" type="java.lang.String" value="&lt;Not Set&gt;"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblUsuario">
+    <Component class="javax.swing.JLabel" name="lblCPF">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="SansSerif" size="14" style="1"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="2"/>
-        <Property name="text" type="java.lang.String" value="Usu&#xe1;rio:"/>
+        <Property name="text" type="java.lang.String" value="CPF:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="txtCadastroUsuario">
+    <Component class="javax.swing.JTextField" name="txtCadastroCPF">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Gadugi" size="14" style="0"/>
@@ -150,6 +150,9 @@
           </Border>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCadastrarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="lblCadastro">
       <Properties>
