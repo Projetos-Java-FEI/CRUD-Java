@@ -29,9 +29,7 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblLogin" min="-2" pref="70" max="-2" attributes="0"/>
-                  <Component id="lblSenha" alignment="0" min="-2" pref="48" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
@@ -48,6 +46,8 @@
                           </Group>
                       </Group>
                   </Group>
+                  <Component id="lblSenha" alignment="0" max="32767" attributes="0"/>
+                  <Component id="lblLogin" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="55" max="32767" attributes="0"/>
           </Group>
