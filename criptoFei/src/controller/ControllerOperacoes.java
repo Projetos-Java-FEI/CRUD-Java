@@ -2,7 +2,6 @@ package controller;
 
 import DAO.Conexao;
 import DAO.DAO_Usuario;
-import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -14,9 +13,9 @@ import view.Carteira;
 
 public class ControllerOperacoes {
     private Carteira view;
-    private SessionManager user;
+    private User user;
 
-    public ControllerOperacoes(Carteira view, SessionManager user) {
+    public ControllerOperacoes(Carteira view, User user) {
         this.view = view;
         this.user = user;
     }
@@ -32,11 +31,27 @@ public class ControllerOperacoes {
         try {
             Connection conn = conexao.getConnection();
             DAO_Usuario dao = new DAO_Usuario(conn);
-            User user1 = user.getUser();
+            User user1 = SessionManager.getUser();
             dao.depositar(user1);
+            view.setSaldo(getSaldo());
 
         } catch(SQLException e) {            
             JOptionPane.showMessageDialog(view, "Depósito não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    public void realizarSaque() {
+        
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Usuario dao = new DAO_Usuario(conn);
+            User user1 = SessionManager.getUser();
+            dao.sacar(user1);
+            view.setSaldo(getSaldo());
+
+        } catch(SQLException e) {            
+            JOptionPane.showMessageDialog(view, "Saque não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
     
@@ -47,9 +62,9 @@ public class ControllerOperacoes {
         try {
             Connection conn = conexao.getConnection();
             DAO_Usuario dao = new DAO_Usuario(conn);
-            int id = user.getUser().getId();
-            double saldo = dao.obterSaldo(id).doubleValue();
-            String saldoFormatado = String.format("%.2f", saldo); 
+            String saldoFormatado = String.format("%.2f", 
+    dao.obterSaldoReais(SessionManager.getUser().getId()).doubleValue()); 
+            
             return saldoFormatado;
 
         } catch(SQLException e) {            

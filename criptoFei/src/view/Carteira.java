@@ -12,11 +12,10 @@ public class Carteira extends javax.swing.JFrame {
     public Carteira() {
         initComponents();
         
-        c = new ControllerOperacoes();
+        c = new ControllerOperacoes(this, SessionManager.getUser());
         
         User user = SessionManager.getUser();
         lblNome.setText(user.getNome());
-        String cpf = String.format(user.getCpf());
         lblCPF.setText(user.formatarCpf(user.getCpf()));
         
         lblSaldo.setText(c.getSaldo().toString());
@@ -42,11 +41,13 @@ public class Carteira extends javax.swing.JFrame {
         lblSaldo = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         lblCPF = new javax.swing.JLabel();
+        btnSacar = new javax.swing.JButton();
         panelExtrato = new javax.swing.JPanel();
         label1 = new java.awt.Label();
         btnExtrato = new javax.swing.JButton();
         panelDivisao = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        btnConsultarSaldo = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -146,52 +147,69 @@ public class Carteira extends javax.swing.JFrame {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText("Saldo Disponível");
 
-        lblCPF.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        lblCPF.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblCPF.setForeground(new java.awt.Color(255, 255, 255));
         lblCPF.setText("CPF");
+
+        btnSacar.setBackground(new java.awt.Color(255, 255, 255));
+        btnSacar.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnSacar.setForeground(new java.awt.Color(1, 101, 198));
+        btnSacar.setText("Sacar");
+        btnSacar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 3, true));
+        btnSacar.setBorderPainted(false);
+        btnSacar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnSacar.setFocusPainted(false);
+        btnSacar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSacarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelSaldoLayout = new javax.swing.GroupLayout(panelSaldo);
         panelSaldo.setLayout(panelSaldoLayout);
         panelSaldoLayout.setHorizontalGroup(
             panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
+            .addGroup(panelSaldoLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelSaldoLayout.createSequentialGroup()
+                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSaldoLayout.createSequentialGroup()
                         .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 64, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panelSaldoLayout.createSequentialGroup()
+                        .addComponent(lblCPF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
+                .addGap(51, 51, 51)
+                .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
+                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSaldoLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
-                        .addComponent(lblCPF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(72, 72, 72)))
-                .addGap(23, 23, 23))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37))
+                        .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(51, 51, 51))
         );
         panelSaldoLayout.setVerticalGroup(
             panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(34, 34, 34)
                 .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblCPF))
+                .addComponent(lblCPF)
+                .addGap(16, 16, 16)
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSaldo)
                     .addComponent(jLabel1))
-                .addGap(67, 67, 67)
-                .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16))
         );
 
         panelExtrato.setBackground(new java.awt.Color(144, 185, 213));
@@ -244,6 +262,20 @@ public class Carteira extends javax.swing.JFrame {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("DIVISÃO DO DINHEIRO");
 
+        btnConsultarSaldo.setBackground(new java.awt.Color(255, 255, 255));
+        btnConsultarSaldo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnConsultarSaldo.setForeground(new java.awt.Color(1, 101, 198));
+        btnConsultarSaldo.setText("Saldo Total");
+        btnConsultarSaldo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(255, 255, 255), 3, true));
+        btnConsultarSaldo.setBorderPainted(false);
+        btnConsultarSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnConsultarSaldo.setFocusPainted(false);
+        btnConsultarSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConsultarSaldoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelDivisaoLayout = new javax.swing.GroupLayout(panelDivisao);
         panelDivisao.setLayout(panelDivisaoLayout);
         panelDivisaoLayout.setHorizontalGroup(
@@ -252,13 +284,19 @@ public class Carteira extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDivisaoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         panelDivisaoLayout.setVerticalGroup(
             panelDivisaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelDivisaoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addContainerGap(228, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
@@ -304,6 +342,10 @@ public class Carteira extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    public void setSaldo(String saldo) {
+        lblSaldo.setText(saldo);
+    }
+    
     private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
         TelaUsuario telaUser = new TelaUsuario();
         telaUser.setVisible(true);
@@ -323,13 +365,23 @@ public class Carteira extends javax.swing.JFrame {
     private void btnTransferirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransferirActionPerformed
         c.realizarDeposito();
     }//GEN-LAST:event_btnTransferirActionPerformed
+
+    private void btnSacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarActionPerformed
+        c.realizarSaque();
+    }//GEN-LAST:event_btnSacarActionPerformed
+
+    private void btnConsultarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarSaldoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnConsultarSaldoActionPerformed
     
                                         
 
   
     private ControllerOperacoes c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnConsultarSaldo;
     private javax.swing.JButton btnExtrato;
+    private javax.swing.JButton btnSacar;
     private javax.swing.JButton btnTransferir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

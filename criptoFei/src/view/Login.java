@@ -14,12 +14,12 @@ public class Login extends javax.swing.JFrame {
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
 
-    public JTextField getTxtNome() {
-        return txtNome;
+    public JTextField getTxtCpf() {
+        return txtCpf;
     }
 
-    public void setTxtNome(JTextField txtNome) {
-        this.txtNome = txtNome;
+    public void setTxtCpf(JTextField txtCpf) {
+        this.txtCpf = txtCpf;
     }
 
     public JTextField getTxtSenha() {
@@ -38,7 +38,7 @@ public class Login extends javax.swing.JFrame {
         lblNome = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
         txtSenha = new javax.swing.JTextField();
-        txtNome = new javax.swing.JTextField();
+        txtCpf = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         lblCadastro = new javax.swing.JLabel();
 
@@ -61,7 +61,7 @@ public class Login extends javax.swing.JFrame {
 
         lblNome.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblNome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblNome.setText("Usuário:");
+        lblNome.setText("CPF:");
 
         lblSenha.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblSenha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -69,7 +69,7 @@ public class Login extends javax.swing.JFrame {
 
         txtSenha.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
-        txtNome.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtCpf.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Gadugi", 0, 12)); // NOI18N
         jLabel1.setText("Não possui conta?");
@@ -102,7 +102,7 @@ public class Login extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblCadastro))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtNome, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                                .addComponent(txtCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
                                 .addComponent(txtSenha))))
                     .addComponent(lblSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -114,7 +114,7 @@ public class Login extends javax.swing.JFrame {
                 .addGap(41, 41, 41)
                 .addComponent(lblNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(lblSenha)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -179,7 +179,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel lblCadastro;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSenha;
-    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtCpf;
     private javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
 }
