@@ -1,16 +1,53 @@
 package view;
 
+import controller.ControllerCadastro;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JTextField;
 
 
 public class Cadastro extends javax.swing.JFrame {
 
     public Cadastro() {
         initComponents();
-        
+        c = new ControllerCadastro(this);
         
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
+
+    public JButton getBtnCadastrar() {
+        return btnCadastrar;
+    }
+
+    public void setBtnCadastrar(JButton btnCadastrar) {
+        this.btnCadastrar = btnCadastrar;
+    }
+
+    public JTextField getTxtCPF() {
+        return txtCPF;
+    }
+
+    public void setTxtCPF(JTextField txtCPF) {
+        this.txtCPF = txtCPF;
+    }
+
+    public JTextField getTxtNome() {
+        return txtNome;
+    }
+
+    public void setTxtNome(JTextField txtNome) {
+        this.txtNome = txtNome;
+    }
+
+    public JTextField getTxtSenha() {
+        return txtSenha;
+    }
+
+    public void setTxtSenha(JTextField txtSenha) {
+        this.txtSenha = txtSenha;
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -22,32 +59,33 @@ public class Cadastro extends javax.swing.JFrame {
     private void initComponents() {
 
         lblNome = new javax.swing.JLabel();
-        txtCadastroNome = new javax.swing.JTextField();
+        txtNome = new javax.swing.JTextField();
         lblCPF = new javax.swing.JLabel();
-        txtCadastroCPF = new javax.swing.JTextField();
-        txtCadastroSenha = new javax.swing.JTextField();
+        txtCPF = new javax.swing.JTextField();
+        txtSenha = new javax.swing.JTextField();
         lblSenha = new javax.swing.JLabel();
         btnCadastrar = new javax.swing.JButton();
         lblCadastro = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         lblNome.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblNome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblNome.setText("Nome:");
 
-        txtCadastroNome.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
-        txtCadastroNome.setHorizontalAlignment(javax.swing.JTextField.LEFT);
-        txtCadastroNome.setActionCommand("<Not Set>");
+        txtNome.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtNome.setHorizontalAlignment(javax.swing.JTextField.LEFT);
+        txtNome.setActionCommand("<Not Set>");
 
         lblCPF.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblCPF.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblCPF.setText("CPF:");
 
-        txtCadastroCPF.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtCPF.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
-        txtCadastroSenha.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtSenha.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
         lblSenha.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblSenha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -58,6 +96,7 @@ public class Cadastro extends javax.swing.JFrame {
         btnCadastrar.setForeground(new java.awt.Color(255, 255, 255));
         btnCadastrar.setText("Cadastrar");
         btnCadastrar.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnCadastrar.setFocusPainted(false);
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadastrarActionPerformed(evt);
@@ -88,9 +127,9 @@ public class Cadastro extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtCadastroNome)
-                                    .addComponent(txtCadastroCPF)
-                                    .addComponent(txtCadastroSenha)
+                                    .addComponent(txtNome)
+                                    .addComponent(txtCPF)
+                                    .addComponent(txtSenha)
                                     .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -105,15 +144,15 @@ public class Cadastro extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCadastroNome, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNome, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblCPF)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCadastroCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(lblSenha)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtCadastroSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(btnCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28))
@@ -123,7 +162,7 @@ public class Cadastro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarActionPerformed
-        // TODO add your handling code here:
+        c.salvarUser();
     }//GEN-LAST:event_btnCadastrarActionPerformed
 
     /**
@@ -131,7 +170,7 @@ public class Cadastro extends javax.swing.JFrame {
      */
     
     
-
+    private ControllerCadastro c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JLabel jLabel2;
@@ -139,8 +178,8 @@ public class Cadastro extends javax.swing.JFrame {
     private javax.swing.JLabel lblCadastro;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSenha;
-    private javax.swing.JTextField txtCadastroCPF;
-    private javax.swing.JTextField txtCadastroNome;
-    private javax.swing.JTextField txtCadastroSenha;
+    private javax.swing.JTextField txtCPF;
+    private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

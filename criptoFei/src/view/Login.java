@@ -1,15 +1,33 @@
 package view;
 
+import controller.ControllerLogin;
 import javax.swing.ImageIcon;
+import javax.swing.JTextField;
 
 
 public class Login extends javax.swing.JFrame {
 
     public Login() {
         initComponents();
-        
+        c = new ControllerLogin(this);
         
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
+    }
+
+    public JTextField getTxtCpf() {
+        return txtCpf;
+    }
+
+    public void setTxtCpf(JTextField txtCpf) {
+        this.txtCpf = txtCpf;
+    }
+
+    public JTextField getTxtSenha() {
+        return txtSenha;
+    }
+
+    public void setTxtSenha(JTextField txtSenha) {
+        this.txtSenha = txtSenha;
     }
 
     @SuppressWarnings("unchecked")
@@ -17,39 +35,41 @@ public class Login extends javax.swing.JFrame {
     private void initComponents() {
 
         btnLogin = new javax.swing.JButton();
-        lblLogin = new javax.swing.JLabel();
+        lblNome = new javax.swing.JLabel();
         lblSenha = new javax.swing.JLabel();
-        txtUsuario = new javax.swing.JTextField();
-        txtUsuario1 = new javax.swing.JTextField();
+        txtSenha = new javax.swing.JTextField();
+        txtCpf = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         lblCadastro = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
         setForeground(java.awt.Color.white);
+        setResizable(false);
 
         btnLogin.setBackground(new java.awt.Color(0, 102, 204));
         btnLogin.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(255, 255, 255));
         btnLogin.setText("Login");
         btnLogin.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btnLogin.setFocusPainted(false);
         btnLogin.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnLoginActionPerformed(evt);
             }
         });
 
-        lblLogin.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        lblLogin.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        lblLogin.setText("Usuário:");
+        lblNome.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        lblNome.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        lblNome.setText("CPF:");
 
         lblSenha.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         lblSenha.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         lblSenha.setText("Senha:");
 
-        txtUsuario.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtSenha.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
-        txtUsuario1.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
+        txtCpf.setFont(new java.awt.Font("Gadugi", 0, 14)); // NOI18N
 
         jLabel1.setFont(new java.awt.Font("Gadugi", 0, 12)); // NOI18N
         jLabel1.setText("Não possui conta?");
@@ -71,9 +91,7 @@ public class Login extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(37, 37, 37)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,21 +102,23 @@ public class Login extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(lblCadastro))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtUsuario1, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
-                                .addComponent(txtUsuario)))))
+                                .addComponent(txtCpf, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                                .addComponent(txtSenha))))
+                    .addComponent(lblSenha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblNome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(41, 41, 41)
-                .addComponent(lblLogin)
+                .addComponent(lblNome)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtCpf, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(lblSenha)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -112,9 +132,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        TelaUsuario telaUsuario = new TelaUsuario();
-        telaUsuario.setVisible(true);
-        this.dispose();
+        c.loginUser();
     }//GEN-LAST:event_btnLoginActionPerformed
 
     private void lblCadastroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCadastroMouseClicked
@@ -154,14 +172,14 @@ public class Login extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-
+    private ControllerLogin c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblCadastro;
-    private javax.swing.JLabel lblLogin;
+    private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSenha;
-    private javax.swing.JTextField txtUsuario;
-    private javax.swing.JTextField txtUsuario1;
+    private javax.swing.JTextField txtCpf;
+    private javax.swing.JTextField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

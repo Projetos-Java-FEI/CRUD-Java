@@ -1,9 +1,12 @@
 package view;
 
+import controller.ControllerUsuario;
 import java.awt.Color;
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
+import model.User;
+import util.SessionManager;
 
 
 public class TelaUsuario extends javax.swing.JFrame {
@@ -11,7 +14,12 @@ public class TelaUsuario extends javax.swing.JFrame {
     
     public TelaUsuario() {
         initComponents();
+        User user = SessionManager.getUser();
         
+        // usa o metodo da classe SessionManager para pegar valores do user logado
+        lblNomeUsuario.setText(user.getNome()); 
+        
+        this.getContentPane().setBackground(new Color(228,228,228));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
 
@@ -19,74 +27,17 @@ public class TelaUsuario extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        lblHome = new javax.swing.JLabel();
-        lblCripto = new javax.swing.JLabel();
-        lblCarteira1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblNomeUsuario = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        lblHome1 = new javax.swing.JLabel();
+        lblCripto = new javax.swing.JLabel();
+        lblCarteira = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
-
-        jPanel1.setBackground(new java.awt.Color(1, 101, 198));
-
-        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoCriptoFei (1).png"))); // NOI18N
-
-        lblHome.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/home (1).png"))); // NOI18N
-        lblHome.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblHome.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblHomeMouseClicked(evt);
-            }
-        });
-
-        lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency (1).png"))); // NOI18N
-        lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblCripto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCriptoMouseClicked(evt);
-            }
-        });
-
-        lblCarteira1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/wallet (2) (1).png"))); // NOI18N
-        lblCarteira1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblCarteira1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCarteira1MouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(17, 17, 17)
-                .addComponent(jLabel1)
-                .addContainerGap(23, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblCarteira1)
-                    .addComponent(lblCripto)
-                    .addComponent(lblHome))
-                .addGap(37, 37, 37))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(39, 39, 39)
-                .addComponent(lblHome)
-                .addGap(43, 43, 43)
-                .addComponent(lblCarteira1)
-                .addGap(43, 43, 43)
-                .addComponent(lblCripto)
-                .addContainerGap(465, Short.MAX_VALUE))
-        );
+        setResizable(false);
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(0, 29, 58));
@@ -96,23 +47,80 @@ public class TelaUsuario extends javax.swing.JFrame {
         lblNomeUsuario.setForeground(new java.awt.Color(0, 29, 58));
         lblNomeUsuario.setText("Nome");
 
+        jPanel2.setBackground(new java.awt.Color(1, 101, 198));
+
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png"))); // NOI18N
+
+        lblHome1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/home.png"))); // NOI18N
+        lblHome1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblHome1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblHome1MouseClicked(evt);
+            }
+        });
+
+        lblCripto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency.png"))); // NOI18N
+        lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblCripto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCriptoMouseClicked(evt);
+            }
+        });
+
+        lblCarteira.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCarteira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/wallet.png"))); // NOI18N
+        lblCarteira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblCarteira.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCarteiraMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addContainerGap(17, Short.MAX_VALUE))
+            .addComponent(lblHome1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblCarteira, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(lblCripto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel2)
+                .addGap(41, 41, 41)
+                .addComponent(lblHome1)
+                .addGap(43, 43, 43)
+                .addComponent(lblCarteira)
+                .addGap(53, 53, 53)
+                .addComponent(lblCripto)
+                .addContainerGap(374, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(37, 37, 37)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblNomeUsuario)
-                .addGap(0, 809, Short.MAX_VALUE))
+                .addGap(0, 762, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addGap(27, 27, 27)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
                     .addComponent(lblNomeUsuario))
@@ -122,19 +130,19 @@ public class TelaUsuario extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void lblHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHomeMouseClicked
-        this.setVisible(true);
-    }//GEN-LAST:event_lblHomeMouseClicked
+    private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
 
-    private void lblCarteira1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteira1MouseClicked
+    }//GEN-LAST:event_lblHome1MouseClicked
+
+    private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
         Carteira c = new Carteira();
         c.setVisible(true);
         this.dispose();
-    }//GEN-LAST:event_lblCarteira1MouseClicked
+    }//GEN-LAST:event_lblCarteiraMouseClicked
 
     private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
-        Cripto crip = new Cripto();
-        crip.setVisible(true);
+        Cripto cripto = new Cripto();
+        cripto.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblCriptoMouseClicked
 
@@ -169,14 +177,15 @@ public class TelaUsuario extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-
+    
+    private ControllerUsuario c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblCarteira1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
-    private javax.swing.JLabel lblHome;
+    private javax.swing.JLabel lblHome1;
     private javax.swing.JLabel lblNomeUsuario;
     // End of variables declaration//GEN-END:variables
 }
