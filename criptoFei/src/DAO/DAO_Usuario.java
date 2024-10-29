@@ -148,5 +148,26 @@ public class DAO_Usuario {
         return -1; // Retorna -1 se o usuário não for encontrado
     }
     
+    public BigDecimal obterSaldo(int userId) {
+        BigDecimal saldo = BigDecimal.ZERO;  // Variável para armazenar o saldo
+
+        String sql = "SELECT saldo_real FROM carteira WHERE id_user = ?";
+        
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);  // Define o ID do usuário na consulta
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    saldo = rs.getBigDecimal("saldo_real");  // Armazena o saldo na variável
+                } else {
+                    System.out.println("Usuário não encontrado.");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return saldo;  // Retorna o saldo para ser utilizado
+    }
     
 }

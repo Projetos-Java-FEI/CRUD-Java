@@ -66,5 +66,16 @@ public class User {
     public void setTipoUser(String tipoUser) {
         this.tipoUser = tipoUser;
     }
+    
+    public String formatarCpf(String cpf) {
+        StringBuilder cpfFormatado = new StringBuilder(cpf);
+        if(cpf.length() == 11) {
+            cpfFormatado.insert(3, '.');
+            cpfFormatado.insert(7, '.');
+            cpfFormatado.insert(11, '-');
+            return cpfFormatado.toString();
+        }
+        return cpf;
+    }
 }
 

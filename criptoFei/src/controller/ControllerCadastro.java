@@ -33,7 +33,6 @@ public class ControllerCadastro {
             view.dispose();
             
         } catch(SQLException e) {            
-            System.out.println(e);
             JOptionPane.showMessageDialog(view, "Usuário não cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
