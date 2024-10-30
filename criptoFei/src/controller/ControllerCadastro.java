@@ -19,8 +19,27 @@ public class ControllerCadastro {
     public void salvarUser() {
         String nome = view.getTxtNome().getText();
         String CPF = view.getTxtCPF().getText();
-        String senha = view.getTxtSenha().getText();
         
+        if (!CPF.matches("\\d{11}")) {
+            JOptionPane.showMessageDialog(view, "CPF inválida! O CPF deve conter exatamente 11 números.", "Erro", JOptionPane.ERROR_MESSAGE);
+        
+            view.getTxtCPF().setText("");
+            view.getTxtCPF().requestFocus();    
+            return;
+        }
+        
+        char[] password = view.getTxtSenha().getPassword();
+        String senha = new String(password);
+        
+        if (!senha.matches("\\d{6}")) {
+            JOptionPane.showMessageDialog(view, "Senha inválida! A senha deve conter exatamente 6 números.", "Erro", JOptionPane.ERROR_MESSAGE);
+        
+            view.getTxtSenha().setText("");
+            view.getTxtSenha().requestFocus();    
+            return;
+        }
+        
+            
         User user = new User(nome, CPF, senha, "Investidor");
         
         Conexao conexao = new Conexao();

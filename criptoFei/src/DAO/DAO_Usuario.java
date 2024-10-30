@@ -192,7 +192,7 @@ public class DAO_Usuario {
        statement.execute();
        conn.close();
              
-   }
+    }
         // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
         String sqlSelectId = "SELECT id_user FROM users WHERE cpf = ?";

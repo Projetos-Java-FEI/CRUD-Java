@@ -22,7 +22,8 @@ public class ControllerLogin {
         // Criamos o objeto User
         User user = new User();
         user.setCpf(view.getTxtCpf().getText());
-        user.setSenha(view.getTxtSenha().getText());
+        char[] password = view.getTxtSenha().getPassword();
+        user.setSenha(new String(password));
 
         // Criamos o objeto de conexão
         Conexao c = new Conexao();
