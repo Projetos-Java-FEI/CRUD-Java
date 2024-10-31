@@ -6,6 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.sql.Timestamp;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -107,6 +109,9 @@ public class DAO_Usuario {
                             int rowsUpdated = statement.executeUpdate();
                             if (rowsUpdated > 0) {
                                 JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso! Valor depositado: " + valor);
+                                String tipoOp = String.format("+ %s", valor.toString());
+                                
+                                extrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
                             } else {
                                 JOptionPane.showMessageDialog(null, "Falha ao realizar o depósito. Usuário não encontrado.");
                             }
@@ -192,7 +197,7 @@ public class DAO_Usuario {
        statement.execute();
        conn.close();
              
-   }
+    }
         // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
         String sqlSelectId = "SELECT id_user FROM users WHERE cpf = ?";
@@ -229,6 +234,25 @@ public class DAO_Usuario {
         return saldo;
     }
    
+    public void extrato(int idUser, BigDecimal quantidade, String tipoOp, String tipoOperacao, LocalDateTime date) throws SQLException {
+        String sqlInsertOp = "INSERT INTO extrato (id_user, quantidade, operacao_reais, tipo_operacao, data)"
+         + " VALUES (?, ?, ?, ?, ?)";
+        PreparedStatement statement = conn.prepareStatement(sqlInsertOp);
+
+        try {
+            statement.setInt(1, idUser);
+            statement.setBigDecimal(2, quantidade);
+            statement.setString(3, tipoOp);
+            statement.setString(4, tipoOperacao);
+            statement.setTimestamp(5, Timestamp.valueOf(date));
+            statement.executeUpdate();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            statement.close();
+        }
+    }
      
     
 }

@@ -72,4 +72,8 @@ public class ControllerOperacoes {
         }
         return "inválido";
     }
+    
+    public void extrato() {
+        
+    }
 }
