@@ -1,7 +1,7 @@
 package model;
 
 
-public class Ripple extends Moedas implements Tarifas {
+public class Ripple extends Moeda implements Tarifas {
     
     @Override
     public double calcularTaxaCompra(double valor) {

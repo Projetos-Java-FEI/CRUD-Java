@@ -189,15 +189,61 @@ public class DAO_Usuario {
     //Esse excluir vai servir futuramente para o ADM, o investidor não utiliza
     //esse método.
     
-    public void excluir(User user) throws SQLException{
-       
-       String sql = "delete from users where cpf = ?";
-       PreparedStatement statement = conn.prepareStatement(sql);
-       statement.setString(1, user.getCpf());
-       statement.execute();
-       conn.close();
-             
+    public void excluir() throws SQLException {
+        // Painel para entrada do CPF
+        JPanel panel = new JPanel();
+        JTextField cpfField = new JTextField(11);
+        panel.add(cpfField);
+        int option = JOptionPane.showConfirmDialog(null, panel, "Digite o CPF do usuário a ser excluído", JOptionPane.OK_CANCEL_OPTION);
+
+        if (option == JOptionPane.OK_OPTION) {
+            String cpf = cpfField.getText();
+
+            // Consulta para verificar se o CPF existe e obter os dados do usuário
+            String sqlCheck = "SELECT nome, user_type FROM users WHERE cpf = ?";
+            try (PreparedStatement stmtCheck = conn.prepareStatement(sqlCheck)) {
+                stmtCheck.setString(1, cpf);
+                try (ResultSet rs = stmtCheck.executeQuery()) {
+                    if (rs.next()) {
+                        // Exibe os dados do usuário encontrados e pergunta se deseja excluir
+                        String nome = rs.getString("nome");
+                        String userType = rs.getString("user_type");
+                        int confirm = JOptionPane.showConfirmDialog(
+                                null,
+                                "Deseja realmente excluir o usuário?\nNome: " + nome + "\nTipo: " + userType,
+                                "Confirmação de Exclusão",
+                                JOptionPane.YES_NO_OPTION,
+                                JOptionPane.WARNING_MESSAGE
+                        );
+
+                        if (confirm == JOptionPane.YES_OPTION) {
+                            // Se confirmado, exclui o usuário
+                            String sqlDelete = "DELETE FROM users WHERE cpf = ?";
+                            try (PreparedStatement stmtDelete = conn.prepareStatement(sqlDelete)) {
+                                stmtDelete.setString(1, cpf);
+                                int rowsDeleted = stmtDelete.executeUpdate();
+                                if (rowsDeleted > 0) {
+                                    JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso.");
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Erro ao excluir o usuário.");
+                                }
+                            }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Usuário com CPF " + cpf + " não encontrado.");
+                    }
+                }
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Erro ao buscar usuário: " + e.getMessage());
+                throw e;
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Operação cancelada.");
+        }
     }
+
         // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
         String sqlSelectId = "SELECT id_user FROM users WHERE cpf = ?";

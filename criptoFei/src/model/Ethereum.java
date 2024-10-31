@@ -1,7 +1,7 @@
 package model;
 
 
-public class Ethereum extends Moedas implements Tarifas {
+public class Ethereum extends Moeda implements Tarifas {
     
     @Override
     public double calcularTaxaCompra(double valor) {

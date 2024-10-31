@@ -1,7 +1,7 @@
 package model;
 
 
-public class Real extends Moedas implements Tarifas {
+public class Real extends Moeda implements Tarifas {
 
     @Override
     public double calcularTaxaCompra(double valor) {

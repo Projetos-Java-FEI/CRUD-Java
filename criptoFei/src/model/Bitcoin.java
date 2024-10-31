@@ -1,7 +1,8 @@
 package model;
 
 
-public class Bitcoin extends Moedas implements Tarifas {
+public class Bitcoin extends Moeda implements Tarifas {
+
 
     @Override
     public double calcularTaxaCompra(double valor) {
