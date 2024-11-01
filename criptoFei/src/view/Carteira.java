@@ -1,16 +1,19 @@
 package view;
 
+import controller.ControllerExtrato;
 import controller.ControllerOperacoes;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import model.User;
-import DAO.DAO_Usuario;
+import javax.swing.JTable;
 import util.SessionManager;
 
 public class Carteira extends javax.swing.JFrame {
 
     public Carteira() {
         initComponents();
+        cExtrato = new ControllerExtrato(this);
+        cExtrato.carregarExtrato();
         
         c = new ControllerOperacoes(this, SessionManager.getUser());
         
@@ -42,18 +45,21 @@ public class Carteira extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         lblCPF = new javax.swing.JLabel();
         btnSacar = new javax.swing.JButton();
-        panelExtrato = new javax.swing.JPanel();
-        label1 = new java.awt.Label();
-        btnExtrato = new javax.swing.JButton();
         panelDivisao = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         btnConsultarSaldo = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        btnExtrato = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblExtrato = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusable(false);
+        setMaximumSize(null);
+        setPreferredSize(new java.awt.Dimension(1105, 696));
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(1, 101, 198));
@@ -112,7 +118,6 @@ public class Carteira extends javax.swing.JFrame {
         );
 
         panelSaldo.setBackground(new java.awt.Color(81, 137, 172));
-        panelSaldo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(228, 228, 228), 5, true));
         panelSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelSaldo.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
@@ -175,22 +180,19 @@ public class Carteira extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSaldoLayout.createSequentialGroup()
                         .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(panelSaldoLayout.createSequentialGroup()
-                        .addComponent(lblCPF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                    .addComponent(lblCPF, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelSaldoLayout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 22, Short.MAX_VALUE)
-                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelSaldoLayout.createSequentialGroup()
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 79, Short.MAX_VALUE)
+                .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel5)
+                    .addGroup(panelSaldoLayout.createSequentialGroup()
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(51, 51, 51))
+                        .addComponent(lblSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22))
         );
         panelSaldoLayout.setVerticalGroup(
             panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -199,63 +201,21 @@ public class Carteira extends javax.swing.JFrame {
                 .addComponent(lblNome, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(lblCPF)
-                .addGap(16, 16, 16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblSaldo)
                     .addComponent(jLabel1))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addGroup(panelSaldoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnTransferir, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSacar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(16, 16, 16))
         );
 
-        panelExtrato.setBackground(new java.awt.Color(144, 185, 213));
-        panelExtrato.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(228, 228, 228), 5, true));
-        panelExtrato.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        panelExtrato.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
-
-        label1.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        label1.setForeground(new java.awt.Color(255, 255, 255));
-        label1.setText("ULTIMAS TRANSAÇÕES");
-
-        btnExtrato.setBackground(new java.awt.Color(255, 255, 255));
-        btnExtrato.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        btnExtrato.setForeground(new java.awt.Color(1, 101, 198));
-        btnExtrato.setText("Extrato Completo");
-        btnExtrato.setToolTipText("");
-        btnExtrato.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(144, 185, 213), 4, true));
-        btnExtrato.setBorderPainted(false);
-        btnExtrato.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnExtrato.setFocusPainted(false);
-
-        javax.swing.GroupLayout panelExtratoLayout = new javax.swing.GroupLayout(panelExtrato);
-        panelExtrato.setLayout(panelExtratoLayout);
-        panelExtratoLayout.setHorizontalGroup(
-            panelExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelExtratoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelExtratoLayout.createSequentialGroup()
-                .addGap(88, 88, 88)
-                .addComponent(btnExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(86, 86, 86))
-        );
-        panelExtratoLayout.setVerticalGroup(
-            panelExtratoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelExtratoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(525, 525, 525)
-                .addComponent(btnExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-
         panelDivisao.setBackground(new java.awt.Color(114, 164, 197));
-        panelDivisao.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(228, 228, 228), 5, true));
+        panelDivisao.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(114, 164, 197), 5, true));
         panelDivisao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelDivisao.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
@@ -285,7 +245,7 @@ public class Carteira extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(285, Short.MAX_VALUE)
                 .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -294,7 +254,7 @@ public class Carteira extends javax.swing.JFrame {
             .addGroup(panelDivisaoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 174, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -303,25 +263,99 @@ public class Carteira extends javax.swing.JFrame {
         jLabel4.setForeground(new java.awt.Color(0, 29, 58));
         jLabel4.setText("Dashboard");
 
+        jPanel1.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 255), 5, true));
+
+        btnExtrato.setBackground(new java.awt.Color(255, 255, 255));
+        btnExtrato.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        btnExtrato.setForeground(new java.awt.Color(1, 101, 198));
+        btnExtrato.setText("Extrato Completo");
+        btnExtrato.setToolTipText("");
+        btnExtrato.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(144, 185, 213), 4, true));
+        btnExtrato.setBorderPainted(false);
+        btnExtrato.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnExtrato.setFocusPainted(false);
+
+        tblExtrato.setBackground(new java.awt.Color(255, 255, 255));
+        tblExtrato.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        tblExtrato.setForeground(new java.awt.Color(0, 0, 0));
+        tblExtrato.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Quantidade", "Variação", "Operação", "Data"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblExtrato.setEnabled(false);
+        tblExtrato.setOpaque(false);
+        tblExtrato.setRowHeight(30);
+        tblExtrato.setShowGrid(true);
+        jScrollPane1.setViewportView(tblExtrato);
+        if (tblExtrato.getColumnModel().getColumnCount() > 0) {
+            tblExtrato.getColumnModel().getColumn(3).setMinWidth(120);
+        }
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(212, Short.MAX_VALUE)
+                .addComponent(btnExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(194, 194, 194))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(btnExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
                         .addComponent(jLabel4)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(41, 41, 41)
+                        .addGap(842, 842, 842))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(panelSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(panelDivisao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(35, 35, 35)
-                        .addComponent(panelExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(43, 43, 43))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(panelSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(38, 38, 38)
+                                .addComponent(panelDivisao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(45, 45, 45))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(147, 147, 147))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -329,22 +363,31 @@ public class Carteira extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(30, 30, 30)
                 .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(panelSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(panelDivisao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(panelExtrato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(12, Short.MAX_VALUE))
+                .addGap(12, 12, 12)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panelSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panelDivisao, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    public void atualizarExtrato() {
+        cExtrato.carregarExtrato();
+    }
+    
     public void setSaldo(String saldo) {
         lblSaldo.setText(saldo);
     }
+
+    public JTable getTblExtrato() {
+        return tblExtrato;
+    }
+    
+    
     
     private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
         TelaUsuario telaUser = new TelaUsuario();
@@ -376,7 +419,7 @@ public class Carteira extends javax.swing.JFrame {
     
                                         
 
-  
+    private ControllerExtrato cExtrato;
     private ControllerOperacoes c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsultarSaldo;
@@ -388,8 +431,9 @@ public class Carteira extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
-    private java.awt.Label label1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCPF;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
@@ -397,7 +441,7 @@ public class Carteira extends javax.swing.JFrame {
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JPanel panelDivisao;
-    private javax.swing.JPanel panelExtrato;
     private javax.swing.JPanel panelSaldo;
+    private javax.swing.JTable tblExtrato;
     // End of variables declaration//GEN-END:variables
 }

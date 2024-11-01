@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -108,8 +111,8 @@ public class DAO_Usuario {
 
                             int rowsUpdated = statement.executeUpdate();
                             if (rowsUpdated > 0) {
-                                JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso! Valor depositado: " + valor);
-                                String tipoOp = String.format("+ %s", valor.toString());
+                                JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso! Valor depositado: R$ " + valor);
+                                String tipoOp = String.format("+ R$ %s", valor.toString());
                                 
                                 extrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
                             } else {
@@ -170,7 +173,10 @@ public class DAO_Usuario {
 
                             int rowsUpdated = statement.executeUpdate();
                             if (rowsUpdated > 0) {
-                                JOptionPane.showMessageDialog(null, "Saque realizado com sucesso! Valor do saque: " + valor);
+                                String tipoOp = String.format("- R$ %s", valor.toString());
+                                
+                                extrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
+                                JOptionPane.showMessageDialog(null, "Saque realizado com sucesso! Valor do saque: R$ " + valor);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Falha ao realizar o saque. Usuário não encontrado.");
                             }
@@ -255,11 +261,11 @@ public class DAO_Usuario {
                 }
             }
         }
-        return -1; // Retorna -1 se o usuário não for encontrado
+        return -1; // retorna -1 se o usuário não for encontrado
     }
     
     public BigDecimal obterSaldoReais(int userId) {
-        BigDecimal saldo = BigDecimal.ZERO;  // Variável para armazenar o saldo
+        BigDecimal saldo = BigDecimal.ZERO;  // variável para armazenar o saldo
 
         String sql = "SELECT saldo_real FROM carteira WHERE id_user = ?";
         
@@ -300,5 +306,31 @@ public class DAO_Usuario {
         }
     }
      
+    public ArrayList<Object[]> getExtrato(User user) throws SQLException {
+        ArrayList listaExtrato = new ArrayList<>();
+        String sql = "SELECT quantidade, operacao_reais, tipo_operacao, data FROM extrato WHERE id_user = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, user.getId()); 
+        ResultSet rs = stmt.executeQuery();
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00"); 
+        // formatar o número para mostrar apenas com 2 casas decimais
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // formata a data para tirar os nano segundos presentes na lib
+        
+        while(rs.next()) {
+            
+            Object[] extrato = new Object[4]; 
+            extrato[0] = decimalFormat.format(rs.getBigDecimal("quantidade")).toString();
+            extrato[1] = rs.getString("operacao_reais");
+            extrato[2] = rs.getString("tipo_operacao");
+            Timestamp timestamp = rs.getTimestamp("data");
+            extrato[3] = dateFormat.format(timestamp);
+            
+            listaExtrato.add(extrato);
+        }
+        
+        return listaExtrato; // retorna o arraylist com os valores do extrato
+    }
     
 }

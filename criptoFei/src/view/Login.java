@@ -1,6 +1,7 @@
 package view;
 
 import controller.ControllerLogin;
+import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
@@ -12,7 +13,7 @@ public class Login extends javax.swing.JFrame {
         initComponents();
         c = new ControllerLogin(this);
         
-        setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
+        setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());       
     }
 
     public JTextField getTxtCpf() {
@@ -47,6 +48,11 @@ public class Login extends javax.swing.JFrame {
         setTitle("CriptoFEI");
         setForeground(java.awt.Color.white);
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
 
         btnLogin.setBackground(new java.awt.Color(0, 102, 204));
         btnLogin.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
@@ -153,41 +159,12 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_lblCadastroMouseClicked
 
     private void txtSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSenhaActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_txtSenhaActionPerformed
 
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+    }//GEN-LAST:event_formKeyPressed
+
    
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Login().setVisible(true);
-//            }
-//        });
-//    }
     private ControllerLogin c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnLogin;

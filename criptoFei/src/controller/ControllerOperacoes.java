@@ -34,6 +34,10 @@ public class ControllerOperacoes {
             User user1 = SessionManager.getUser();
             dao.depositar(user1);
             view.setSaldo(getSaldo());
+            
+            // chama a função para atualizar o extrato no view após a operação
+            view.atualizarExtrato(); 
+            
 
         } catch(SQLException e) {            
             JOptionPane.showMessageDialog(view, "Depósito não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -49,6 +53,7 @@ public class ControllerOperacoes {
             User user1 = SessionManager.getUser();
             dao.sacar(user1);
             view.setSaldo(getSaldo());
+            view.atualizarExtrato(); 
 
         } catch(SQLException e) {            
             JOptionPane.showMessageDialog(view, "Saque não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
@@ -71,9 +76,5 @@ public class ControllerOperacoes {
             e.printStackTrace();
         }
         return "inválido";
-    }
-    
-    public void extrato() {
-        
     }
 }
