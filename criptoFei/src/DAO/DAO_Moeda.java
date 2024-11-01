@@ -1,6 +1,8 @@
 package DAO;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -9,13 +11,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import java.sql.ResultSet;
+import java.time.LocalDateTime;
 import model.Moeda;
+import service.extratoService;
+import service.cotacaoService;
+
+
 
 public class DAO_Moeda {
     private Connection conn;
+    
 
     public DAO_Moeda(Connection conn) {
         this.conn = conn;
+        
     }
     
     public void adicionarMoeda() {
@@ -76,4 +86,140 @@ public class DAO_Moeda {
             JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
     }
+    
+    public void comprarMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
+        BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
+
+        // Verifica saldo em BRL na carteira
+        String sqlCheckSaldo = "SELECT saldo_real FROM carteira WHERE id_user = ?";
+        try (PreparedStatement checkSaldoStmt = conn.prepareStatement(sqlCheckSaldo)) {
+            checkSaldoStmt.setInt(1, idUser);
+            try (ResultSet rs = checkSaldoStmt.executeQuery()) {
+                if (rs.next()) {
+                    BigDecimal saldoAtual = rs.getBigDecimal("saldo_real");
+
+                    if (saldoAtual.compareTo(valorCompra) >= 0) {
+                        // Atualizar saldo da carteira: subtrai BRL e adiciona a quantidade de moeda
+                        String sqlUpdateCarteira = "UPDATE carteira SET saldo_real = saldo_real - ?, saldo_" + moeda.getSimbolo() + " = saldo_" + moeda.getSimbolo() + " + ? WHERE id_user = ?";
+                        try (PreparedStatement updateCarteiraStmt = conn.prepareStatement(sqlUpdateCarteira)) {
+                            updateCarteiraStmt.setBigDecimal(1, valorCompra);
+                            updateCarteiraStmt.setBigDecimal(2, quantidade);
+                            updateCarteiraStmt.setInt(3, idUser);
+
+                            int rowsUpdated = updateCarteiraStmt.executeUpdate();
+                            if (rowsUpdated > 0) {
+                                // Chamada ao serviço de extrato
+                                extratoService extratoService = new extratoService(conn);
+                                extratoService.registrarExtrato(idUser,
+                                        quantidade,
+                                        "- " + valorCompra.toString(),
+                                        "Compra de " + moeda.getSimbolo(),
+                                        LocalDateTime.now().withNano(0));
+                                JOptionPane.showMessageDialog(null, "Compra de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!");
+
+                                // Atualiza as cotações após a compra
+                                cotacaoService cotacaoService = new cotacaoService(conn);
+                                cotacaoService.atualizarCotacoes();
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Erro ao atualizar a carteira.");
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Saldo insuficiente para realizar a compra.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                }
+            }
+        }
+    }
+
+    public void venderMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
+        BigDecimal valorVenda = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
+
+        // Verifica saldo da moeda específica na carteira
+        String sqlCheckSaldoMoeda = "SELECT saldo_" + moeda.getSimbolo() + " FROM carteira WHERE id_user = ?";
+        try (PreparedStatement checkSaldoMoedaStmt = conn.prepareStatement(sqlCheckSaldoMoeda)) {
+            checkSaldoMoedaStmt.setInt(1, idUser);
+            try (ResultSet rs = checkSaldoMoedaStmt.executeQuery()) {
+                if (rs.next()) {
+                    BigDecimal saldoMoeda = rs.getBigDecimal("saldo_" + moeda.getSimbolo());
+
+                    if (saldoMoeda.compareTo(quantidade) >= 0) {
+                        // Atualizar saldo da carteira: adiciona BRL e subtrai a quantidade de moeda
+                        String sqlUpdateCarteira = "UPDATE carteira SET saldo_real = saldo_real + ?, saldo_" + moeda.getSimbolo() + " = saldo_" + moeda.getSimbolo() + " - ? WHERE id_user = ?";
+                        try (PreparedStatement updateCarteiraStmt = conn.prepareStatement(sqlUpdateCarteira)) {
+                            updateCarteiraStmt.setBigDecimal(1, valorVenda);
+                            updateCarteiraStmt.setBigDecimal(2, quantidade);
+                            updateCarteiraStmt.setInt(3, idUser);
+
+                            int rowsUpdated = updateCarteiraStmt.executeUpdate();
+                            if (rowsUpdated > 0) {
+                                // Chamada ao serviço de extrato
+                                extratoService extratoService = new extratoService(conn);
+                                extratoService.registrarExtrato(idUser,
+                                        quantidade, "+ " + valorVenda.toString(),
+                                        "Venda de " + moeda.getSimbolo(),
+                                        LocalDateTime.now().withNano(0));
+                                JOptionPane.showMessageDialog(null, "Venda de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!");
+
+                                // Atualiza as cotações após a venda
+                                cotacaoService cotacaoService = new cotacaoService(conn);
+                                cotacaoService.atualizarCotacoes();
+                                
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Erro ao atualizar a carteira.");
+                            }
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Saldo insuficiente de " + moeda.getSimbolo() + " para realizar a venda.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                }
+            }
+        }
+    }
+
+
+    public void atualizarCotacoes() throws SQLException {
+        String sqlSelect = "SELECT simbolo, cotacao FROM criptos";
+        String sqlUpdate = "UPDATE criptos SET cotacao = ? WHERE simbolo = ?";
+        String sqlInsertHistorico = "INSERT INTO historico_cripto"
+                + " (simbolo, valor_antigo, data_hora)"
+                + " VALUES (?, ?, ?)";
+
+        try (PreparedStatement selectStmt = conn.prepareStatement(sqlSelect);
+             ResultSet rs = selectStmt.executeQuery()) {
+
+            while (rs.next()) {
+                String simbolo = rs.getString("simbolo");
+                BigDecimal cotacaoAntiga = rs.getBigDecimal("cotacao");
+
+                // Calcular nova cotação com variação entre -5% e +5%
+                BigDecimal variacao = cotacaoAntiga.multiply(BigDecimal.valueOf(Math.random() * 0.1 - 0.05)); // variação entre -5% e +5%
+                BigDecimal novaCotacao = cotacaoAntiga.add(variacao).setScale(2, RoundingMode.HALF_UP); // Ajustar para 2 casas decimais
+
+                // Inserir a cotação antiga no histórico
+                try (PreparedStatement insertHistoricoStmt = conn.prepareStatement(sqlInsertHistorico)) {
+                    insertHistoricoStmt.setString(1, simbolo);
+                    insertHistoricoStmt.setBigDecimal(2, cotacaoAntiga);
+                    insertHistoricoStmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // data/hora atual
+                    insertHistoricoStmt.executeUpdate();
+                }
+
+                // Atualizar a nova cotação na tabela de criptos
+                try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+                    updateStmt.setBigDecimal(1, novaCotacao);
+                    updateStmt.setString(2, simbolo);
+                    updateStmt.executeUpdate();
+                }
+            }
+        }
 }
+
+
+
+}
+   
+

@@ -18,6 +18,10 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import model.User;
+import service.extratoService;
+import service.cotacaoService;
+
+
 
 
 public class DAO_Usuario {
@@ -95,7 +99,7 @@ public class DAO_Usuario {
 
             // Verifica a senha antes de proceder com o depósito
             String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
-        
+
             try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
                 verifyStmt.setInt(1, user.getId());
                 verifyStmt.setString(2, senha);
@@ -104,7 +108,7 @@ public class DAO_Usuario {
                     if (rs.next()) {
                         // Se a senha estiver correta, realiza o depósito
                         String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real + ? WHERE id_user = ?";
-                    
+
                         try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
                             statement.setBigDecimal(1, valor);
                             statement.setInt(2, user.getId());
@@ -113,8 +117,14 @@ public class DAO_Usuario {
                             if (rowsUpdated > 0) {
                                 JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso! Valor depositado: R$ " + valor);
                                 String tipoOp = String.format("+ R$ %s", valor.toString());
-                                
-                                extrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
+
+                                // Registrar operação no extrato
+                                extratoService extratoService = new extratoService(conn);
+                                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
+
+                                // Atualiza as cotações das criptos
+                                cotacaoService cotacaoService = new cotacaoService(conn);
+                                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o depósito
                             } else {
                                 JOptionPane.showMessageDialog(null, "Falha ao realizar o depósito. Usuário não encontrado.");
                             }
@@ -128,7 +138,7 @@ public class DAO_Usuario {
             JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
     }
-    
+
     public void sacar(User user) throws SQLException {
         // Cria um painel com os campos de entrada
         JPanel panel = new JPanel();
@@ -155,18 +165,18 @@ public class DAO_Usuario {
 
             String senha = new String(senhaField.getPassword());
 
-            // Verifica a senha antes de proceder com o depósito
+            // Verifica a senha antes de proceder com o saque
             String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
-        
+
             try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
                 verifyStmt.setInt(1, user.getId());
                 verifyStmt.setString(2, senha);
 
                 try (ResultSet rs = verifyStmt.executeQuery()) {
                     if (rs.next()) {
-                        // Se a senha estiver correta, realiza o depósito
+                        // Se a senha estiver correta, realiza o saque
                         String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real - ? WHERE id_user = ?";
-                    
+
                         try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
                             statement.setBigDecimal(1, valor);
                             statement.setInt(2, user.getId());
@@ -174,9 +184,16 @@ public class DAO_Usuario {
                             int rowsUpdated = statement.executeUpdate();
                             if (rowsUpdated > 0) {
                                 String tipoOp = String.format("- R$ %s", valor.toString());
-                                
-                                extrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
+
+                                // Registrar operação no extrato
+                                extratoService extratoService = new extratoService(conn);
+                                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
                                 JOptionPane.showMessageDialog(null, "Saque realizado com sucesso! Valor do saque: R$ " + valor);
+
+                                // Atualiza as cotações das criptos
+                                cotacaoService cotacaoService = new cotacaoService(conn);
+                                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o saque
+                                
                             } else {
                                 JOptionPane.showMessageDialog(null, "Falha ao realizar o saque. Usuário não encontrado.");
                             }
@@ -190,6 +207,8 @@ public class DAO_Usuario {
             JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
     }
+
+
 
        
     //Esse excluir vai servir futuramente para o ADM, o investidor não utiliza
