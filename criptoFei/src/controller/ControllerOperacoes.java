@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import model.User;
-import util.SessionManager;
+import service.SessionManager;
 import view.Carteira;
 
 

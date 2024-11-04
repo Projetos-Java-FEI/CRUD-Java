@@ -6,7 +6,7 @@ import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import model.User;
-import util.SessionManager;
+import service.SessionManager;
 
 
 public class TelaUsuario extends javax.swing.JFrame {

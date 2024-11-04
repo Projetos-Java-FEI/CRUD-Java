@@ -6,7 +6,7 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import model.User;
 import javax.swing.JTable;
-import util.SessionManager;
+import service.SessionManager;
 
 public class Carteira extends javax.swing.JFrame {
 
