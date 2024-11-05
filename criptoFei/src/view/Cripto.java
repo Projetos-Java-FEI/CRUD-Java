@@ -1,7 +1,9 @@
 package view;
 
+import controller.ControllerCripto;
 import java.awt.Color;
 import javax.swing.ImageIcon;
+import javax.swing.JTable;
 
 
 public class Cripto extends javax.swing.JFrame {
@@ -9,8 +11,15 @@ public class Cripto extends javax.swing.JFrame {
     public Cripto() {
         initComponents();
         
+        c = new ControllerCripto(this);
+        c.carregarCriptos();
+        
         this.getContentPane().setBackground(new Color(228,228,228));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
+    }
+
+    public JTable getTblCriptos() {
+        return tblCriptos;
     }
 
     @SuppressWarnings("unchecked")
@@ -23,6 +32,8 @@ public class Cripto extends javax.swing.JFrame {
         lblHome1 = new javax.swing.JLabel();
         lblCripto = new javax.swing.JLabel();
         lblCarteira = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCriptos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -82,22 +93,42 @@ public class Cripto extends javax.swing.JFrame {
                 .addContainerGap(374, Short.MAX_VALUE))
         );
 
+        tblCriptos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(tblCriptos);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(39, 39, 39)
-                .addComponent(jLabel2)
-                .addGap(0, 879, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(77, 77, 77)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 472, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
-                .addContainerGap(634, Short.MAX_VALUE))
+                .addGap(45, 45, 45)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -148,13 +179,15 @@ public class Cripto extends javax.swing.JFrame {
 //            }
 //        });
 //    }
-
+    ControllerCripto c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
     private javax.swing.JLabel lblHome1;
+    private javax.swing.JTable tblCriptos;
     // End of variables declaration//GEN-END:variables
 }

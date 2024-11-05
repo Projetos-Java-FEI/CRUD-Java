@@ -352,4 +352,22 @@ public class DAO_Usuario {
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
     
+    public ArrayList<Object[]> getCriptos() throws SQLException {
+        ArrayList listaCriptos = new ArrayList<>();
+        String sql = "SELECT simbolo, nome, cotacao FROM criptos";
+        PreparedStatement stmt = conn.prepareStatement(sql); 
+        ResultSet rs = stmt.executeQuery();
+        
+        while(rs.next()) {
+            
+            Object[] criptos = new Object[3]; 
+            criptos[0] = rs.getString("simbolo");
+            criptos[1] = rs.getString("nome");
+            criptos[2] = rs.getDouble("cotacao");
+            
+            listaCriptos.add(criptos);
+        }
+        
+        return listaCriptos; // retorna o arraylist com os valores das criptos
+    }
 }

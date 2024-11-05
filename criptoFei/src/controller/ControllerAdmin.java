@@ -5,6 +5,7 @@ import DAO.DAO_Moeda;
 import javax.swing.JOptionPane;
 import view.Administrador;
 import DAO.DAO_Usuario;
+import DAO.DAO_Admin;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -69,5 +70,47 @@ public class ControllerAdmin {
         } catch(SQLException e) {
                 
         }
+    }
+    
+    public void excluiInvestidor() {
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Admin dao = new DAO_Admin(conn);
+            dao.excluir();
+            
+        } catch(SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
+    
+    public void consultaSaldo() {
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Admin dao = new DAO_Admin(conn);
+            dao.consultarSaldo();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public int getQntdUsuarios() {
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Admin dao = new DAO_Admin(conn);
+            
+            return dao.getNumeroUsuarios();
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+        return 0;
     }
 }

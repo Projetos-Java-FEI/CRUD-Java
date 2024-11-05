@@ -14,6 +14,7 @@ import view.Carteira;
 public class ControllerOperacoes {
     private Carteira view;
     private User user;
+ 
 
     public ControllerOperacoes(Carteira view, User user) {
         this.view = view;
@@ -77,4 +78,5 @@ public class ControllerOperacoes {
         }
         return "inválido";
     }
+    
 }
