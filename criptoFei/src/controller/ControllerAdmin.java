@@ -1,6 +1,7 @@
 package controller;
 
 import DAO.Conexao;
+import DAO.DAO_Moeda;
 import javax.swing.JOptionPane;
 import view.Administrador;
 import DAO.DAO_Usuario;
@@ -39,6 +40,34 @@ public class ControllerAdmin {
         }
         
         
+        
     }
     
+    public void criarMoeda() {
+        
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Moeda dao = new DAO_Moeda(conn);
+            dao.adicionarMoeda();
+            
+        } catch(SQLException e) {
+                
+        }
+    }
+    
+    public void atualizaCotacao() {
+        
+        Conexao conexao = new Conexao();
+        
+        try {
+            Connection conn = conexao.getConnection();
+            DAO_Moeda dao = new DAO_Moeda(conn);
+            dao.atualizarCotacoes();
+            
+        } catch(SQLException e) {
+                
+        }
+    }
 }

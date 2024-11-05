@@ -59,7 +59,6 @@ public class Carteira extends javax.swing.JFrame {
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setFocusable(false);
         setMaximumSize(null);
-        setPreferredSize(new java.awt.Dimension(1105, 696));
         setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(1, 101, 198));

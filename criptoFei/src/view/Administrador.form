@@ -87,6 +87,9 @@
           <Dimension value="[150, 24]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCadastrarCriptoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnExcluirCripto">
       <Properties>
@@ -135,6 +138,9 @@
           <Dimension value="[150, 24]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCotacaoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSair">
       <Properties>
@@ -146,6 +152,9 @@
           <Dimension value="[150, 24]"/>
         </Property>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSairActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

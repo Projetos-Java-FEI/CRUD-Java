@@ -60,6 +60,8 @@ public class DAO_Moeda {
             try {
                 cotacao = new BigDecimal(cotacaoField.getText());
                 tax = new BigDecimal(taxField.getText());
+                tax = tax.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
+                
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Valor inválido para cotação ou taxa.");
                 return;
@@ -70,6 +72,7 @@ public class DAO_Moeda {
                 stmt.setString(1, simbolo);
                 stmt.setString(2, nome);
                 stmt.setBigDecimal(3, cotacao);
+                
                 stmt.setBigDecimal(4, tax);
 
                 int rowsInserted = stmt.executeUpdate();

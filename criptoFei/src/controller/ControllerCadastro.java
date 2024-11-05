@@ -55,4 +55,5 @@ public class ControllerCadastro {
             JOptionPane.showMessageDialog(view, "Usuário não cadastrado!", "Erro", JOptionPane.ERROR_MESSAGE);
         }
     }
-}
+    
+    }

@@ -1,10 +1,13 @@
 package view;
 
+import controller.ControllerAdmin;
+
 
 public class Administrador extends javax.swing.JFrame {
 
     public Administrador() {
         initComponents();
+        c = new ControllerAdmin();
     }
 
     @SuppressWarnings("unchecked")
@@ -34,6 +37,11 @@ public class Administrador extends javax.swing.JFrame {
         btnCadastrarCripto.setText("Cadastrar Cripto");
         btnCadastrarCripto.setMaximumSize(new java.awt.Dimension(150, 24));
         btnCadastrarCripto.setMinimumSize(new java.awt.Dimension(150, 24));
+        btnCadastrarCripto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCadastrarCriptoActionPerformed(evt);
+            }
+        });
 
         btnExcluirCripto.setText("Excluir Cripto");
         btnExcluirCripto.setMaximumSize(new java.awt.Dimension(150, 24));
@@ -56,10 +64,20 @@ public class Administrador extends javax.swing.JFrame {
         btnCotacao.setToolTipText("");
         btnCotacao.setMaximumSize(new java.awt.Dimension(150, 24));
         btnCotacao.setMinimumSize(new java.awt.Dimension(150, 24));
+        btnCotacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCotacaoActionPerformed(evt);
+            }
+        });
 
         btnSair.setText("Sair");
         btnSair.setMaximumSize(new java.awt.Dimension(150, 24));
         btnSair.setMinimumSize(new java.awt.Dimension(150, 24));
+        btnSair.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSairActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -111,7 +129,20 @@ public class Administrador extends javax.swing.JFrame {
         
     }//GEN-LAST:event_btnConsultarSaldoActionPerformed
 
+    private void btnCadastrarCriptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarCriptoActionPerformed
+        c.criarMoeda();
+    }//GEN-LAST:event_btnCadastrarCriptoActionPerformed
 
+    private void btnCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCotacaoActionPerformed
+        c.atualizaCotacao();
+    }//GEN-LAST:event_btnCotacaoActionPerformed
+
+    private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
+       
+    }//GEN-LAST:event_btnSairActionPerformed
+    
+    
+    ControllerAdmin c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCadastrar;
     private javax.swing.JButton btnCadastrarCripto;
