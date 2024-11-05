@@ -45,6 +45,7 @@ public class Administrador extends javax.swing.JFrame {
         btnSair.setForeground(new java.awt.Color(255, 255, 255));
         btnSair.setText("Sair");
         btnSair.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        btnSair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnSair.setFocusable(false);
         btnSair.setMaximumSize(new java.awt.Dimension(150, 24));
         btnSair.setMinimumSize(new java.awt.Dimension(150, 24));
@@ -61,6 +62,7 @@ public class Administrador extends javax.swing.JFrame {
         btnCadastrar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnCadastrar.setForeground(new java.awt.Color(102, 153, 255));
         btnCadastrar.setText("Cadastrar Investidor");
+        btnCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCadastrar.setFocusable(false);
         btnCadastrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -72,6 +74,7 @@ public class Administrador extends javax.swing.JFrame {
         btnExcluir.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnExcluir.setForeground(new java.awt.Color(102, 153, 255));
         btnExcluir.setText("Excluir Investidor");
+        btnExcluir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluir.setFocusable(false);
         btnExcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -83,6 +86,7 @@ public class Administrador extends javax.swing.JFrame {
         btnConsultarSaldo.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnConsultarSaldo.setForeground(new java.awt.Color(102, 153, 255));
         btnConsultarSaldo.setText("Consultar Saldo");
+        btnConsultarSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConsultarSaldo.setFocusable(false);
         btnConsultarSaldo.setMaximumSize(new java.awt.Dimension(150, 24));
         btnConsultarSaldo.setMinimumSize(new java.awt.Dimension(150, 24));
@@ -96,6 +100,7 @@ public class Administrador extends javax.swing.JFrame {
         btnConsultarExtrato.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnConsultarExtrato.setForeground(new java.awt.Color(102, 153, 255));
         btnConsultarExtrato.setText("Consultar Extrato");
+        btnConsultarExtrato.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnConsultarExtrato.setFocusable(false);
         btnConsultarExtrato.setMaximumSize(new java.awt.Dimension(150, 24));
         btnConsultarExtrato.setMinimumSize(new java.awt.Dimension(150, 24));
@@ -193,6 +198,7 @@ public class Administrador extends javax.swing.JFrame {
         btnCadastrarCripto.setBackground(new java.awt.Color(255, 255, 255));
         btnCadastrarCripto.setForeground(new java.awt.Color(0, 102, 204));
         btnCadastrarCripto.setText("Cadastrar Cripto");
+        btnCadastrarCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCadastrarCripto.setFocusable(false);
         btnCadastrarCripto.setMaximumSize(new java.awt.Dimension(150, 24));
         btnCadastrarCripto.setMinimumSize(new java.awt.Dimension(150, 24));
@@ -205,6 +211,7 @@ public class Administrador extends javax.swing.JFrame {
         btnExcluirCripto.setBackground(new java.awt.Color(255, 255, 255));
         btnExcluirCripto.setForeground(new java.awt.Color(0, 102, 204));
         btnExcluirCripto.setText("Excluir Cripto");
+        btnExcluirCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluirCripto.setFocusable(false);
         btnExcluirCripto.setMaximumSize(new java.awt.Dimension(150, 24));
         btnExcluirCripto.setMinimumSize(new java.awt.Dimension(150, 24));
@@ -218,6 +225,7 @@ public class Administrador extends javax.swing.JFrame {
         btnCotacao.setForeground(new java.awt.Color(0, 102, 204));
         btnCotacao.setText("Atualizar Cotação");
         btnCotacao.setToolTipText("");
+        btnCotacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCotacao.setFocusable(false);
         btnCotacao.setMaximumSize(new java.awt.Dimension(150, 24));
         btnCotacao.setMinimumSize(new java.awt.Dimension(150, 24));

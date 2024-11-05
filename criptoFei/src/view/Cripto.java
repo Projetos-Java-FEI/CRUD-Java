@@ -93,15 +93,18 @@ public class Cripto extends javax.swing.JFrame {
                 .addContainerGap(374, Short.MAX_VALUE))
         );
 
+        tblCriptos.setBackground(new java.awt.Color(102, 153, 255));
+        tblCriptos.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        tblCriptos.setForeground(new java.awt.Color(255, 255, 255));
         tblCriptos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Símbolo", "Nome", "Cotação"
             }
         ));
         jScrollPane1.setViewportView(tblCriptos);
@@ -127,7 +130,7 @@ public class Cripto extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addComponent(jLabel2)
                 .addGap(45, 45, 45)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
