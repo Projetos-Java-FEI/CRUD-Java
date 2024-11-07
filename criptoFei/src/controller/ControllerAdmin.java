@@ -10,6 +10,9 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 
 public class ControllerAdmin {
     private Administrador view;
@@ -67,8 +70,7 @@ public class ControllerAdmin {
             DAO_Moeda dao = new DAO_Moeda(conn);
             dao.atualizarCotacoes();
             
-        } catch(SQLException e) {
-                
+        } catch(SQLException e) {      
         }
     }
     
@@ -78,7 +80,10 @@ public class ControllerAdmin {
         try {
             Connection conn = conexao.getConnection();
             DAO_Admin dao = new DAO_Admin(conn);
-            dao.excluir();
+            String erro = dao.excluir(getCpf());
+            if(!erro.isEmpty()) {
+                JOptionPane.showMessageDialog(null, erro, "Erro", JOptionPane.ERROR_MESSAGE);
+            }
             
         } catch(SQLException e) {
             e.printStackTrace();
@@ -92,7 +97,14 @@ public class ControllerAdmin {
         try {
             Connection conn = conexao.getConnection();
             DAO_Admin dao = new DAO_Admin(conn);
-            dao.consultarSaldo();
+            String message = dao.consultarSaldo(getCpf());
+            
+            if(!message.isEmpty() && (!message.startsWith("Erro"))) {  // verifica se a string retornada é vazia, para evitar mostrar um panel vazio
+                JOptionPane.showMessageDialog(null, message, "Consulta de Saldo", JOptionPane.INFORMATION_MESSAGE);
+            } else if(message.startsWith("Erro")) {
+                JOptionPane.showMessageDialog(null, "Carteira não encontrada para este CPF", "Erro", JOptionPane.ERROR_MESSAGE);
+            }
+            
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -113,4 +125,33 @@ public class ControllerAdmin {
         
         return 0;
     }
+    
+    public String getCpf() {
+        JPanel panel = new JPanel();
+        JTextField cpfField = new JTextField(11);
+        panel.add(cpfField);
+        int option = JOptionPane.showConfirmDialog(null, panel, "Digite o CPF para consulta", JOptionPane.OK_CANCEL_OPTION);
+       
+
+        if (option == JOptionPane.OK_OPTION) {
+            return cpfField.getText();
+        } else {
+            return "";
+        } 
+    }
+    
+    public boolean isPositive(String nome, String userType) {
+        int confirm = JOptionPane.showConfirmDialog(
+            null,
+            "Deseja realmente excluir o usuário?\nNome: " + nome + "\nTipo: " + userType,
+            "Confirmação de Exclusão",
+            JOptionPane.YES_NO_OPTION,
+            JOptionPane.WARNING_MESSAGE
+    );
+
+        return (confirm == JOptionPane.YES_OPTION);
+           
+    }
+
+    
 }
