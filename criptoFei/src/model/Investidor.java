@@ -2,7 +2,9 @@ package model;
 
 
 public class Investidor extends User {
-    Carteira carteira = new Carteira();
+    
+    
+    
     
     public void consultarSaldo() {
         

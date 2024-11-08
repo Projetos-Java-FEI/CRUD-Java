@@ -57,15 +57,20 @@ public class DAO_Usuario {
             statement.executeUpdate();
 
             // Obter o ID do usuário recém-criado
-            int userId = getUserId(user.getCpf()); // Método para obter o ID do usuário baseado no CPF
+            int userId = getUserId(user.getCpf()); // método para obter o ID do usuário baseado no CPF
 
-            // Criar carteira para o usuário
-            String sqlInsertCarteira = "INSERT INTO carteira (id_user) VALUES (?)"; // Não é necessário especificar o saldo se for default
+            String sqlInsertCarteira = "INSERT INTO carteira (id_user, simbolo, saldo) VALUES (?, ?, ?)";
+            
             try (PreparedStatement statementCarteira = conn.prepareStatement(sqlInsertCarteira)) {
-                statementCarteira.setInt(1, userId);
-                statementCarteira.executeUpdate();
                 
-            }       
+            String[] criptos = {"BTC", "ETH", "XRP", "BRL"};
+            for (String cripto : criptos) {
+                statementCarteira.setInt(1, userId);
+                statementCarteira.setString(2, cripto);
+                statementCarteira.setBigDecimal(3, BigDecimal.ZERO); // saldo inicial zero para cada cripto
+                statementCarteira.executeUpdate();
+            }
+        }              
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -230,23 +235,6 @@ public class DAO_Usuario {
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
     
-    public ArrayList<Object[]> getCriptos() throws SQLException {
-        ArrayList listaCriptos = new ArrayList<>();
-        String sql = "SELECT simbolo, nome, cotacao FROM criptos";
-        PreparedStatement stmt = conn.prepareStatement(sql); 
-        ResultSet rs = stmt.executeQuery();
-        
-        while(rs.next()) {
-            
-            Object[] criptos = new Object[3]; 
-            criptos[0] = rs.getString("simbolo");
-            criptos[1] = rs.getString("nome");
-            criptos[2] = rs.getDouble("cotacao");
-            
-            listaCriptos.add(criptos);
-        }
-        
-        return listaCriptos; // retorna o arraylist com os valores das criptos
-    }
+    
     
 }

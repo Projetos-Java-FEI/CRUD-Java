@@ -2,6 +2,11 @@ package model;
 
 
 public class Ethereum extends Moeda implements Tarifas {
+
+    public Ethereum(String simbolo, String nome, double cotacao) {
+        super(simbolo, nome, cotacao);
+    }
+  
     
     @Override
     public double calcularTaxaCompra(double valor) {

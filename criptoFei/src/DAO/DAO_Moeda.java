@@ -6,13 +6,10 @@ import java.sql.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import javax.swing.Box;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import model.Moeda;
 import service.extratoService;
 import service.cotacaoService;
@@ -84,99 +81,136 @@ public class DAO_Moeda {
 
 
     
-    public void comprarMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
-        BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
-
-        // Verifica saldo em BRL na carteira
-        String sqlCheckSaldo = "SELECT saldo_real FROM carteira WHERE id_user = ?";
-        try (PreparedStatement checkSaldoStmt = conn.prepareStatement(sqlCheckSaldo)) {
-            checkSaldoStmt.setInt(1, idUser);
-            try (ResultSet rs = checkSaldoStmt.executeQuery()) {
+    public BigDecimal getTaxa(String simbolo, boolean isVenda) throws SQLException {
+        String sqlGetTaxa = isVenda ? "SELECT taxa_venda FROM criptos WHERE simbolo = ?" 
+                                    : "SELECT taxa_compra FROM criptos WHERE simbolo = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlGetTaxa)) {
+            stmt.setString(1, simbolo);
+            try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    BigDecimal saldoAtual = rs.getBigDecimal("saldo_real");
-
-                    if (saldoAtual.compareTo(valorCompra) >= 0) {
-                        // Atualizar saldo da carteira: subtrai BRL e adiciona a quantidade de moeda
-                        String sqlUpdateCarteira = "UPDATE carteira SET saldo_real = saldo_real - ?, saldo_" + moeda.getSimbolo() + " = saldo_" + moeda.getSimbolo() + " + ? WHERE id_user = ?";
-                        try (PreparedStatement updateCarteiraStmt = conn.prepareStatement(sqlUpdateCarteira)) {
-                            updateCarteiraStmt.setBigDecimal(1, valorCompra);
-                            updateCarteiraStmt.setBigDecimal(2, quantidade);
-                            updateCarteiraStmt.setInt(3, idUser);
-
-                            int rowsUpdated = updateCarteiraStmt.executeUpdate();
-                            if (rowsUpdated > 0) {
-                                // Chamada ao serviço de extrato
-                                extratoService extratoService = new extratoService(conn);
-                                extratoService.registrarExtrato(idUser,
-                                        quantidade,
-                                        "- " + valorCompra.toString(),
-                                        "Compra de " + moeda.getSimbolo(),
-                                        LocalDateTime.now().withNano(0));
-                                JOptionPane.showMessageDialog(null, "Compra de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!");
-
-                                // Atualiza as cotações após a compra
-                                cotacaoService cotacaoService = new cotacaoService(conn);
-                                cotacaoService.atualizarCotacoes();
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Erro ao atualizar a carteira.");
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Saldo insuficiente para realizar a compra.");
-                    }
+                    return isVenda ? rs.getBigDecimal("taxa_venda") : rs.getBigDecimal("taxa_compra");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
+                    throw new SQLException("Criptomoeda não encontrada.");
                 }
             }
         }
     }
 
-    public void venderMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
+    public BigDecimal getSaldo(int idUser, String simbolo) throws SQLException {
+        String sqlGetSaldo = "SELECT saldo FROM carteira WHERE id_user = ? AND simbolo = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlGetSaldo)) {
+            stmt.setInt(1, idUser);
+            stmt.setString(2, simbolo);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getBigDecimal("saldo");
+                } else {
+                    return BigDecimal.ZERO;
+                }
+            }
+        }
+    }
+
+    public void inserirMoedaNaCarteira(int idUser, String simbolo) throws SQLException {
+        String sqlInsertMoeda = "INSERT INTO carteira (id_user, simbolo, saldo) VALUES (?, ?, ?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlInsertMoeda)) {
+            stmt.setInt(1, idUser);
+            stmt.setString(2, simbolo);
+            stmt.setBigDecimal(3, BigDecimal.ZERO);
+            stmt.executeUpdate();
+        }
+    }
+
+    public void atualizarSaldoCompra(int idUser, String simboloMoeda, BigDecimal valorCompra, BigDecimal quantidade) throws SQLException {
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo - ? WHERE id_user = ? AND simbolo = 'BRL'; "
+                + "UPDATE carteira SET saldo = saldo + ? WHERE id_user = ? AND simbolo = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlUpdateSaldo)) {
+            stmt.setBigDecimal(1, valorCompra);
+            stmt.setInt(2, idUser);
+            stmt.setBigDecimal(3, quantidade);
+            stmt.setInt(4, idUser);
+            stmt.setString(5, simboloMoeda);
+            stmt.executeUpdate();
+        }
+    }
+    
+    public void atualizarSaldoVenda(int idUser, String simboloMoeda, BigDecimal valorVenda, BigDecimal quantidade) throws SQLException {
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo - ? WHERE id_user = ? AND simbolo = ?; "
+                + "UPDATE carteira SET saldo = saldo + ? WHERE id_user = ? AND simbolo = 'BRL'";
+        try (PreparedStatement stmt = conn.prepareStatement(sqlUpdateSaldo)) {
+            stmt.setBigDecimal(1, quantidade);
+            stmt.setInt(2, idUser);
+            stmt.setString(3, simboloMoeda);
+            stmt.setBigDecimal(4, valorVenda);
+            stmt.setInt(5, idUser);
+            stmt.executeUpdate();
+        }
+    }
+    
+    private boolean moedaExistenteNaCarteira(int idUser, String simbolo) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM carteira WHERE id_user = ? AND simbolo = ?";
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setInt(1, idUser);
+        stmt.setString(2, simbolo);
+        try (ResultSet rs = stmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0; // > 0, eh pq existe na carteira
+            }
+        }
+    }
+    return false; 
+}
+
+    public String comprarMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
+        BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
+        BigDecimal taxaCompra = getTaxa(moeda.getSimbolo(), false);
+        valorCompra = valorCompra.multiply(BigDecimal.ONE.add(taxaCompra));
+
+        BigDecimal saldoBRL = getSaldo(idUser, "BRL");
+        if (saldoBRL.compareTo(valorCompra) < 0) {
+            return "Erro -> Saldo insuficiente para realizar a compra.";
+        }
+
+        if (!moedaExistenteNaCarteira(idUser, moeda.getSimbolo())) {
+            inserirMoedaNaCarteira(idUser, moeda.getSimbolo());
+        }
+
+        atualizarSaldoCompra(idUser, moeda.getSimbolo(), valorCompra, quantidade);
+
+        extratoService extratoService = new extratoService(conn);
+        extratoService.registrarExtrato(idUser, quantidade, "- " + String.format("R$ %.2f", valorCompra), "Compra " + moeda.getSimbolo(), LocalDateTime.now().withNano(0));
+
+        cotacaoService cotacaoService = new cotacaoService(conn);
+        cotacaoService.atualizarCotacoes();
+
+        return "Compra de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!";
+    }
+
+
+    public String venderMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
         BigDecimal valorVenda = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
 
-        // Verifica saldo da moeda específica na carteira
-        String sqlCheckSaldoMoeda = "SELECT saldo_" + moeda.getSimbolo() + " FROM carteira WHERE id_user = ?";
-        try (PreparedStatement checkSaldoMoedaStmt = conn.prepareStatement(sqlCheckSaldoMoeda)) {
-            checkSaldoMoedaStmt.setInt(1, idUser);
-            try (ResultSet rs = checkSaldoMoedaStmt.executeQuery()) {
-                if (rs.next()) {
-                    BigDecimal saldoMoeda = rs.getBigDecimal("saldo_" + moeda.getSimbolo());
+        BigDecimal taxaVenda = getTaxa(moeda.getSimbolo(), true);
+        valorVenda = valorVenda.multiply(BigDecimal.ONE.subtract(taxaVenda));
 
-                    if (saldoMoeda.compareTo(quantidade) >= 0) {
-                        // Atualizar saldo da carteira: adiciona BRL e subtrai a quantidade de moeda
-                        String sqlUpdateCarteira = "UPDATE carteira SET saldo_real = saldo_real + ?, saldo_" + moeda.getSimbolo() + " = saldo_" + moeda.getSimbolo() + " - ? WHERE id_user = ?";
-                        try (PreparedStatement updateCarteiraStmt = conn.prepareStatement(sqlUpdateCarteira)) {
-                            updateCarteiraStmt.setBigDecimal(1, valorVenda);
-                            updateCarteiraStmt.setBigDecimal(2, quantidade);
-                            updateCarteiraStmt.setInt(3, idUser);
-
-                            int rowsUpdated = updateCarteiraStmt.executeUpdate();
-                            if (rowsUpdated > 0) {
-                                // Chamada ao serviço de extrato
-                                extratoService extratoService = new extratoService(conn);
-                                extratoService.registrarExtrato(idUser,
-                                        quantidade, "+ " + valorVenda.toString(),
-                                        "Venda de " + moeda.getSimbolo(),
-                                        LocalDateTime.now().withNano(0));
-                                JOptionPane.showMessageDialog(null, "Venda de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!");
-
-                                // Atualiza as cotações após a venda
-                                cotacaoService cotacaoService = new cotacaoService(conn);
-                                cotacaoService.atualizarCotacoes();
-                                
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Erro ao atualizar a carteira.");
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Saldo insuficiente de " + moeda.getSimbolo() + " para realizar a venda.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Usuário não encontrado.");
-                }
-            }
+        BigDecimal saldoMoeda = getSaldo(idUser, moeda.getSimbolo());
+        if (saldoMoeda.compareTo(quantidade) < 0) {
+            return "Erro -> Você não possui essa quantidade de " + moeda.getSimbolo();
         }
+
+        atualizarSaldoVenda(idUser, moeda.getSimbolo(), valorVenda, quantidade);
+
+        extratoService extratoService = new extratoService(conn);
+        extratoService.registrarExtrato(idUser, quantidade, "+ " + String.format("R$ %.2f", valorVenda), 
+                                        "Venda " + moeda.getSimbolo(), LocalDateTime.now().withNano(0));
+
+        cotacaoService cotacaoService = new cotacaoService(conn);
+        cotacaoService.atualizarCotacoes();
+      
+
+        return "Venda de " + quantidade + " " + moeda.getSimbolo() + " realizada com sucesso!";
     }
+
 
 
     public void atualizarCotacoes() throws SQLException {
@@ -218,9 +252,42 @@ public class DAO_Moeda {
         }
     }
 
-
-
-
+    public ArrayList<Object[]> getCriptos() throws SQLException {
+        ArrayList listaCriptos = new ArrayList<>();
+        String sql = "SELECT simbolo, nome, cotacao FROM criptos WHERE simbolo != 'BRL'";
+        PreparedStatement stmt = conn.prepareStatement(sql); 
+        ResultSet rs = stmt.executeQuery();
+        
+        while(rs.next()) {
+            
+            Object[] criptos = new Object[3]; 
+            criptos[0] = rs.getString("simbolo");
+            criptos[1] = rs.getString("nome");
+            criptos[2] = rs.getDouble("cotacao");
+            
+            listaCriptos.add(criptos);
+        }
+        
+        return listaCriptos; // retorna o arraylist com os valores das criptos
+    }
+    
+    public ArrayList<Object[]> getCriptosUsuario(int userId) throws SQLException {
+        ArrayList<Object[]> listaCriptosUser = new ArrayList<>();
+        String sql = "SELECT simbolo, saldo FROM carteira WHERE simbolo != 'BRL' AND id_user = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while(rs.next()) {
+                    Object[] criptos = new Object[2];
+                    criptos[0] = rs.getDouble("saldo");
+                    criptos[1] = rs.getString("simbolo");
+                    
+                    listaCriptosUser.add(criptos);
+                }
+            }
+        }
+        return listaCriptosUser;
+    } 
 }
    
 

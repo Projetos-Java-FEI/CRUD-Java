@@ -7,7 +7,6 @@ import view.Administrador;
 import DAO.DAO_Usuario;
 import DAO.DAO_Admin;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -208,9 +207,9 @@ public class ControllerAdmin {
         try {
             Connection conn = conexao.getConnection();
             DAO_Admin dao = new DAO_Admin(conn);
-            String erro = dao.excluir(getCpf());
-            if(!erro.isEmpty()) {
-                JOptionPane.showMessageDialog(null, erro, "Erro", JOptionPane.ERROR_MESSAGE);
+            String msg = dao.excluir(getCpf());
+            if(!msg.isEmpty()) {
+                JOptionPane.showMessageDialog(null, msg);
             }
             
         } catch(SQLException e) {

@@ -5,6 +5,14 @@ public class Moeda extends Carteira {
     private String simbolo, nome;
     private double cotacao, taxCompra, taxVenda;
 
+    public Moeda(String simbolo, String nome, double cotacao) {
+        this.simbolo = simbolo;
+        this.nome = nome;
+        this.cotacao = cotacao;
+    }
+    
+    
+
     public String getSimbolo() {
         return simbolo;
     }

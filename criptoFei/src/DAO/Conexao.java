@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Conexao {
     public Connection getConnection() throws SQLException{
         Connection connection = DriverManager.getConnection(
-        "jdbc:postgresql://localhost:5432/CriptoFEI",
+        "jdbc:postgresql://localhost:5433/CriptoFEI",
                 "postgres",
                 "123456");
         return connection;
