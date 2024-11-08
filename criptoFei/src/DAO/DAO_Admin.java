@@ -57,40 +57,38 @@ public class DAO_Admin {
                 if (rs.next()) {
                     int userId = rs.getInt("id_user");
                     String nome = rs.getString("nome");
-                    String sql = "SELECT saldo_real, saldo_btc, saldo_eth, saldo_xrp FROM carteira WHERE id_user = ?";
 
-                    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                        stmt.setInt(1, userId);
-                        try (ResultSet rsSaldo = stmt.executeQuery()) {
-                            if (rsSaldo.next()) {
-                                double saldoReal = rsSaldo.getDouble("saldo_real");
-                                double saldoBtc = rsSaldo.getDouble("saldo_btc");
-                                double saldoEth = rsSaldo.getDouble("saldo_eth");
-                                double saldoXrp = rsSaldo.getDouble("saldo_xrp");
+                    // Consultar saldos na tabela 'carteira' para o usuário específico
+                    String sqlSaldo = "SELECT simbolo, saldo FROM carteira WHERE id_user = ?";
+                    try (PreparedStatement stmtSaldo = conn.prepareStatement(sqlSaldo)) {
+                        stmtSaldo.setInt(1, userId);
+                        try (ResultSet rsSaldo = stmtSaldo.executeQuery()) {
+                            StringBuilder saldoMessage = new StringBuilder();
+                            saldoMessage.append(String.format("Nome: %s\nCPF: %s\n\nSaldos:\n", nome, cpf));
 
-                                String message = String.format(
-                                        "Nome: %s\n"
-                                        + "CPF: %s\n\n"
-                                        + "Saldos:\n"
-                                        + "R$ %.2f\n"
-                                        + "%.8f BTC\n"
-                                        + "%.8f ETH\n"
-                                        + "%.8f XRP\n", nome, cpf, saldoReal, saldoBtc, saldoEth, saldoXrp);
-                                return message;
+                            // Processa os saldos das criptomoedas
+                            while (rsSaldo.next()) {
+                                String simbolo = rsSaldo.getString("simbolo");
+                                double saldo = rsSaldo.getDouble("saldo");
 
-                            } else {
+                                saldoMessage.append(String.format("%s: %.8f\n", simbolo, saldo));
+                            }
+
+                            // Caso não haja saldo, retorna uma mensagem
+                            if (saldoMessage.length() == 0) {
                                 return "Erro -> Carteira não encontrada para este CPF";
-                            }       
-                        }   
-                    }   
+                            }
+
+                            return saldoMessage.toString();
+                        }
+                    }
                 } else {
-                    return "Erro -> Carteira não encontrada para este CPF";
-                }   
-                
-                
+                    return "Erro -> Usuário não encontrado para este CPF";
+                }
             }
         }
     }
+
  
     public int getNumeroUsuarios() throws SQLException {
         String sql = "SELECT COUNT(*) AS total FROM users";

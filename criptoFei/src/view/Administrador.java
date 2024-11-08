@@ -317,7 +317,7 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnConsultarSaldoActionPerformed
 
     private void btnCadastrarCriptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarCriptoActionPerformed
-        c.criarMoeda();
+        c.adicionarMoeda();
     }//GEN-LAST:event_btnCadastrarCriptoActionPerformed
 
     private void btnCotacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCotacaoActionPerformed
@@ -340,6 +340,7 @@ public class Administrador extends javax.swing.JFrame {
 
     private void btnExcluirCriptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCriptoActionPerformed
         // TODO add your handling code here:
+        c.excluirMoeda();
     }//GEN-LAST:event_btnExcluirCriptoActionPerformed
     
     

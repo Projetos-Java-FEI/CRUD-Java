@@ -74,7 +74,7 @@ public class DAO_Usuario {
 }
 
     public String depositar(User user, BigDecimal valor) throws SQLException {  
-        String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real + ? WHERE id_user = ?";
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo + ? WHERE id_user = ? AND simbolo = 'BRL'";
 
         try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
             statement.setBigDecimal(1, valor);
@@ -92,38 +92,58 @@ public class DAO_Usuario {
                 cotacaoService cotacaoService = new cotacaoService(conn);
                 cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o depósito
                 return "Depósito realizado com sucesso! Valor depositado: R$ " + valor;
-                
+
             } else {
-                return "Erro -> Falha ao realizar o depósito. Usuário não encontrado.";
+                return "Erro -> Falha ao realizar o depósito. Usuário não encontrado ou saldo não disponível.";
             }
         }
     }
 
     public String sacar(User user, BigDecimal valor) throws SQLException {
-        String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real - ? WHERE id_user = ?";
+        String sqlCheckSaldo = "SELECT saldo FROM carteira WHERE id_user = ? AND simbolo = 'BRL'";
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo - ? WHERE id_user = ? AND simbolo = 'BRL'";
 
-        try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
-            statement.setBigDecimal(1, valor);
-            statement.setInt(2, user.getId());
+        try (PreparedStatement checkStmt = conn.prepareStatement(sqlCheckSaldo)) {
+            checkStmt.setInt(1, user.getId());
 
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                String tipoOp = String.format("- R$ %s", valor.toString());
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    BigDecimal saldoAtual = rs.getBigDecimal("saldo");
 
-                // Registrar operação no extrato
-                extratoService extratoService = new extratoService(conn);
-                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
+                    if (saldoAtual.compareTo(valor) < 0) {
+                        return "Erro -> Saldo insuficiente para realizar o saque.";
+                    }
 
-                // Atualiza as cotações das criptos
-                cotacaoService cotacaoService = new cotacaoService(conn);
-                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o depósito
-                return "Saque realizado com sucesso! Valor sacado: R$ " + valor;
-                
-            } else {
-                return "Erro -> Falha ao realizar o saque. Usuário não encontrado.";
+                    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdateSaldo)) {
+                        updateStmt.setBigDecimal(1, valor);
+                        updateStmt.setInt(2, user.getId());
+
+                        int rowsUpdated = updateStmt.executeUpdate();
+                        if (rowsUpdated > 0) {
+                            String tipoOp = String.format("- R$ %s", valor.toString());
+
+                            // Registrar operação no extrato
+                            extratoService extratoService = new extratoService(conn);
+                            extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
+
+                            // Atualiza as cotações das criptos
+                            cotacaoService cotacaoService = new cotacaoService(conn);
+                            cotacaoService.atualizarCotacoes();
+                            return "Saque realizado com sucesso! Valor sacado: R$ " + valor;
+                        }
+                    }
+                } else {
+                    return "Erro -> Usuário não encontrado.";
+                }
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Erro -> Falha ao realizar o saque.";
         }
+        return "Erro -> Operação falhou.";
     }
+
+
 
         // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
@@ -142,24 +162,26 @@ public class DAO_Usuario {
     public BigDecimal obterSaldoReais(int userId) {
         BigDecimal saldo = BigDecimal.ZERO;  // variável para armazenar o saldo
 
-        String sql = "SELECT saldo_real FROM carteira WHERE id_user = ?";
-        
+        // Consulta para obter o saldo da moeda 'BRL' na carteira do usuário
+        String sql = "SELECT saldo FROM carteira WHERE id_user = ? AND simbolo = 'BRL'";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);  
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    saldo = rs.getBigDecimal("saldo_real"); 
+                    saldo = rs.getBigDecimal("saldo"); 
                 } else {
-                    System.out.println("Usuário não encontrado.");
+                    System.out.println("Saldo em Reais (BRL) não encontrado para o usuário.");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return saldo;
     }
+
    
     public void extrato(int idUser, BigDecimal quantidade, String tipoOp, String tipoOperacao, LocalDateTime date) throws SQLException {
         String sqlInsertOp = "INSERT INTO extrato (id_user, quantidade, operacao_reais, tipo_operacao, data)"

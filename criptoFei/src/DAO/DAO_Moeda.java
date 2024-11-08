@@ -28,67 +28,61 @@ public class DAO_Moeda {
         
     }
     
-    public void adicionarMoeda() {
-        // Painel para entrada de dados da nova moeda
-        JPanel panel = new JPanel();
-        JTextField simboloField = new JTextField(10);  // Campo para o símbolo da moeda
-        JTextField nomeField = new JTextField(20);     // Campo para o nome da moeda
-        JTextField cotacaoField = new JTextField(10);  // Campo para a cotação da moeda
-        JTextField taxField = new JTextField(5);       // Campo para a taxa da moeda
-        
-        panel.add(new JLabel("Símbolo:"));
-        panel.add(simboloField);
-        panel.add(Box.createVerticalStrut(15));
-        panel.add(new JLabel("Nome:"));
-        panel.add(nomeField);
-        panel.add(Box.createVerticalStrut(15));
-        panel.add(new JLabel("Cotação:"));
-        panel.add(cotacaoField);
-        panel.add(Box.createVerticalStrut(15));
-        panel.add(new JLabel("Taxa:"));
-        panel.add(taxField);
+    public String adicionarMoeda(String simbolo, String nome, BigDecimal cotacao, BigDecimal taxaCompra, BigDecimal taxaVenda) throws SQLException {
+        String sqlCripto = "INSERT INTO criptos (simbolo, nome, cotacao, taxa_compra, taxa_venda) VALUES (?, ?, ?, ?, ?)";
+        String sqlHistorico = "INSERT INTO historico_cripto (simbolo, cotacao, data) VALUES (?, ?, ?)";
 
-        int option = JOptionPane.showConfirmDialog(null, panel, "Adicionar Moeda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        try (PreparedStatement stmtCripto = conn.prepareStatement(sqlCripto);
+             PreparedStatement stmtHistorico = conn.prepareStatement(sqlHistorico)) {
 
-        if (option == JOptionPane.OK_OPTION) {
-            // Obtém e valida os dados inseridos pelo usuário
-            String simbolo = simboloField.getText();
-            String nome = nomeField.getText();
-            BigDecimal cotacao;
-            BigDecimal tax;
+            // Inserir a nova criptomoeda na tabela criptos
+            stmtCripto.setString(1, simbolo);
+            stmtCripto.setString(2, nome);
+            stmtCripto.setBigDecimal(3, cotacao);
+            stmtCripto.setBigDecimal(4, taxaCompra);
+            stmtCripto.setBigDecimal(5, taxaVenda);
 
-            try {
-                cotacao = new BigDecimal(cotacaoField.getText());
-                tax = new BigDecimal(taxField.getText());
-                tax = tax.divide(new BigDecimal("100"), 2, RoundingMode.HALF_UP);
-                
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Valor inválido para cotação ou taxa.");
-                return;
+            int rowsInserted = stmtCripto.executeUpdate();
+
+            if (rowsInserted > 0) {
+                // Inserir o histórico de cotação na tabela historico_cripto
+                stmtHistorico.setString(1, simbolo);
+                stmtHistorico.setBigDecimal(2, cotacao); // O valor da cotação é o valor inicial
+                stmtHistorico.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // Data/hora atual
+
+                stmtHistorico.executeUpdate();
+
+                return "Moeda adicionada com sucesso e histórico registrado!";
+            } else {
+                return "Falha ao adicionar moeda.";
             }
-
-            String sql = "INSERT INTO criptos (simbolo, nome, cotacao, tax) VALUES (?, ?, ?, ?)";
-            try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setString(1, simbolo);
-                stmt.setString(2, nome);
-                stmt.setBigDecimal(3, cotacao);
-                
-                stmt.setBigDecimal(4, tax);
-
-                int rowsInserted = stmt.executeUpdate();
-
-                if (rowsInserted > 0) {
-                    JOptionPane.showMessageDialog(null, "Moeda adicionada com sucesso!");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Falha ao adicionar moeda.");
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao adicionar moeda: " + e.getMessage());
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Erro ao adicionar moeda: " + e.getMessage();
         }
     }
+
+    
+    public String excluirMoeda(String simbolo) throws SQLException {
+    // SQL para excluir a moeda pelo símbolo
+    String sql = "DELETE FROM criptos WHERE simbolo = ?";
+
+    try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+        stmt.setString(1, simbolo);  // Definindo o símbolo da moeda a ser excluída
+
+        int rowsDeleted = stmt.executeUpdate();  // Executando a exclusão
+
+        if (rowsDeleted > 0) {
+            return "Moeda excluída com sucesso!";
+        } else {
+            return "Erro -> Moeda não encontrada.";
+        }
+    } catch (SQLException e) {
+        return "Erro ao excluir moeda: " + e.getMessage();
+    }
+}
+
+
     
     public void comprarMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
         BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
@@ -189,7 +183,7 @@ public class DAO_Moeda {
         String sqlSelect = "SELECT simbolo, cotacao FROM criptos";
         String sqlUpdate = "UPDATE criptos SET cotacao = ? WHERE simbolo = ?";
         String sqlInsertHistorico = "INSERT INTO historico_cripto"
-                + " (simbolo, valor_antigo, data_hora)"
+                + " (simbolo, cotacao, data)"
                 + " VALUES (?, ?, ?)";
 
         try (PreparedStatement selectStmt = conn.prepareStatement(sqlSelect);
@@ -199,27 +193,31 @@ public class DAO_Moeda {
                 String simbolo = rs.getString("simbolo");
                 BigDecimal cotacaoAntiga = rs.getBigDecimal("cotacao");
 
-                // Calcular nova cotação com variação entre -5% e +5%
-                BigDecimal variacao = cotacaoAntiga.multiply(BigDecimal.valueOf(Math.random() * 0.1 - 0.05)); // variação entre -5% e +5%
-                BigDecimal novaCotacao = cotacaoAntiga.add(variacao).setScale(2, RoundingMode.HALF_UP); // Ajustar para 2 casas decimais
+                // Verifica se o símbolo é diferente de "BRL" (Real) antes de atualizar a cotação
+                if (!simbolo.equals("BRL")) {
+                    // Calcular nova cotação com variação entre -5% e +5%
+                    BigDecimal variacao = cotacaoAntiga.multiply(BigDecimal.valueOf(Math.random() * 0.1 - 0.05)); // variação entre -5% e +5%
+                    BigDecimal novaCotacao = cotacaoAntiga.add(variacao).setScale(2, RoundingMode.HALF_UP); // Ajustar para 2 casas decimais
 
-                // Inserir a cotação antiga no histórico
-                try (PreparedStatement insertHistoricoStmt = conn.prepareStatement(sqlInsertHistorico)) {
-                    insertHistoricoStmt.setString(1, simbolo);
-                    insertHistoricoStmt.setBigDecimal(2, cotacaoAntiga);
-                    insertHistoricoStmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // data/hora atual
-                    insertHistoricoStmt.executeUpdate();
-                }
+                    // Inserir a cotação antiga no histórico
+                    try (PreparedStatement insertHistoricoStmt = conn.prepareStatement(sqlInsertHistorico)) {
+                        insertHistoricoStmt.setString(1, simbolo);
+                        insertHistoricoStmt.setBigDecimal(2, cotacaoAntiga);
+                        insertHistoricoStmt.setTimestamp(3, Timestamp.valueOf(LocalDateTime.now())); // data/hora atual
+                        insertHistoricoStmt.executeUpdate();
+                    }
 
-                // Atualizar a nova cotação na tabela de criptos
-                try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
-                    updateStmt.setBigDecimal(1, novaCotacao);
-                    updateStmt.setString(2, simbolo);
-                    updateStmt.executeUpdate();
+                    // Atualizar a nova cotação na tabela de criptos
+                    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdate)) {
+                        updateStmt.setBigDecimal(1, novaCotacao);
+                        updateStmt.setString(2, simbolo);
+                        updateStmt.executeUpdate();
+                    }
                 }
             }
         }
-}
+    }
+
 
 
 
