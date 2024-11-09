@@ -1,20 +1,22 @@
 package view;
 
 import controller.ControllerCripto;
+import controller.ControllerOperacoes;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
-
 
 public class Cripto extends javax.swing.JFrame {
     
     public Cripto() {
         initComponents();
-        
+        cOperacoes = new ControllerOperacoes();
         c = new ControllerCripto(this);
+      
+        lblSaldo.setText(String.format("R$ %s", cOperacoes.getSaldo()));
         c.carregarCriptos();
         c.carregarCriptosUsuario();
-        
+               
         this.getContentPane().setBackground(new Color(42,42,42));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
@@ -40,16 +42,21 @@ public class Cripto extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblCriptos = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         lblCarteira = new javax.swing.JLabel();
         lblHome1 = new javax.swing.JLabel();
         lblCripto = new javax.swing.JLabel();
-        btnComprarCripto = new javax.swing.JButton();
-        btnVenderCripto = new javax.swing.JToggleButton();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCriptosUser = new javax.swing.JTable();
+        jLabel1 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCriptos = new javax.swing.JTable();
+        btnComprarCripto = new javax.swing.JButton();
+        btnVenderCripto = new javax.swing.JToggleButton();
+        jLabel3 = new javax.swing.JLabel();
+        lblSaldo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -57,44 +64,8 @@ public class Cripto extends javax.swing.JFrame {
         setResizable(false);
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(102, 153, 255));
         jLabel2.setText("Criptos");
-
-        jScrollPane1.setBackground(new java.awt.Color(42, 42, 42));
-        jScrollPane1.setForeground(new java.awt.Color(42, 42, 42));
-
-        tblCriptos.setBackground(new java.awt.Color(102, 153, 255));
-        tblCriptos.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
-        tblCriptos.setForeground(new java.awt.Color(255, 255, 255));
-        tblCriptos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
-            },
-            new String [] {
-                "Símbolo", "Nome", "Cotação"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tblCriptos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        tblCriptos.setEditingColumn(0);
-        tblCriptos.setEditingRow(0);
-        tblCriptos.setFocusable(false);
-        tblCriptos.setName("Extrato"); // NOI18N
-        tblCriptos.setRowHeight(30);
-        tblCriptos.setRowSelectionAllowed(true);
-        tblCriptos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        tblCriptos.setShowGrid(false);
-        tblCriptos.setShowHorizontalLines(true);
-        jScrollPane1.setViewportView(tblCriptos);
 
         jPanel2.setBackground(new java.awt.Color(63, 63, 63));
 
@@ -136,7 +107,7 @@ public class Cripto extends javax.swing.JFrame {
                 .addComponent(lblCarteira)
                 .addGap(126, 126, 126)
                 .addComponent(lblCripto)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(378, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -149,29 +120,17 @@ public class Cripto extends javax.swing.JFrame {
                 .addContainerGap(26, Short.MAX_VALUE))
         );
 
-        btnComprarCripto.setText("Comprar Cripto");
-        btnComprarCripto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnComprarCriptoActionPerformed(evt);
-            }
-        });
-
-        btnVenderCripto.setText("Vender Cripto");
-        btnVenderCripto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnVenderCriptoActionPerformed(evt);
-            }
-        });
+        jPanel1.setBackground(new java.awt.Color(63, 63, 63));
 
         jScrollPane2.setBackground(new java.awt.Color(42, 42, 42));
         jScrollPane2.setForeground(new java.awt.Color(42, 42, 42));
 
+        tblCriptosUser.setBackground(new java.awt.Color(42, 42, 42));
+        tblCriptosUser.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        tblCriptosUser.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        tblCriptosUser.setForeground(new java.awt.Color(255, 255, 255));
         tblCriptosUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null},
                 {null, null},
                 {null, null},
                 {null, null},
@@ -190,51 +149,195 @@ public class Cripto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblCriptosUser.setRowHeight(25);
+        tblCriptosUser.setEnabled(false);
+        tblCriptosUser.setGridColor(new java.awt.Color(255, 255, 255));
+        tblCriptosUser.setRowHeight(40);
+        tblCriptosUser.setSelectionBackground(new java.awt.Color(42, 42, 42));
+        tblCriptosUser.setSelectionForeground(new java.awt.Color(42, 42, 42));
+        tblCriptosUser.setShowVerticalLines(false);
         jScrollPane2.setViewportView(tblCriptosUser);
+
+        jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 153, 255));
+        jLabel1.setText("Suas Criptos");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(0, 125, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(62, 62, 62));
+
+        jScrollPane1.setBackground(new java.awt.Color(42, 42, 42));
+        jScrollPane1.setForeground(new java.awt.Color(42, 42, 42));
+
+        tblCriptos.setBackground(new java.awt.Color(42, 42, 42));
+        tblCriptos.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
+        tblCriptos.setForeground(new java.awt.Color(255, 255, 255));
+        tblCriptos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null},
+                {null, null, null}
+            },
+            new String [] {
+                "Símbolo", "Nome", "Cotação"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tblCriptos.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        tblCriptos.setEditingColumn(0);
+        tblCriptos.setEditingRow(0);
+        tblCriptos.setFocusable(false);
+        tblCriptos.setGridColor(new java.awt.Color(255, 255, 255));
+        tblCriptos.setName("Extrato"); // NOI18N
+        tblCriptos.setRowHeight(40);
+        tblCriptos.setSelectionForeground(new java.awt.Color(42, 42, 42));
+        tblCriptos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        tblCriptos.setShowGrid(true);
+        tblCriptos.setShowHorizontalLines(true);
+        jScrollPane1.setViewportView(tblCriptos);
+
+        btnComprarCripto.setBackground(new java.awt.Color(42, 42, 42));
+        btnComprarCripto.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnComprarCripto.setForeground(new java.awt.Color(102, 153, 255));
+        btnComprarCripto.setText("Comprar Cripto");
+        btnComprarCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 153, 255), 1, true));
+        btnComprarCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnComprarCripto.setFocusable(false);
+        btnComprarCripto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnComprarCriptoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnComprarCriptoMouseExited(evt);
+            }
+        });
+        btnComprarCripto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnComprarCriptoActionPerformed(evt);
+            }
+        });
+
+        btnVenderCripto.setBackground(new java.awt.Color(42, 42, 42));
+        btnVenderCripto.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
+        btnVenderCripto.setForeground(new java.awt.Color(102, 153, 255));
+        btnVenderCripto.setText("Vender Cripto");
+        btnVenderCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 153, 255), 1, true));
+        btnVenderCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnVenderCripto.setFocusable(false);
+        btnVenderCripto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnVenderCriptoMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnVenderCriptoMouseExited(evt);
+            }
+        });
+        btnVenderCripto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVenderCriptoActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(102, 153, 255));
+        jLabel3.setText("Saldo:");
+
+        lblSaldo.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        lblSaldo.setForeground(new java.awt.Color(102, 153, 255));
+        lblSaldo.setText("saldo");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(btnComprarCripto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31)
+                        .addComponent(btnVenderCripto, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(lblSaldo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnComprarCripto, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnVenderCripto, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
+                        .addComponent(lblSaldo)))
+                .addGap(30, 30, 30))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(142, 142, 142)
-                .addComponent(jLabel2)
-                .addGap(0, 879, Short.MAX_VALUE))
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
+                .addGap(83, 83, 83)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(180, 180, 180)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jLabel2)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(199, 199, 199)
-                        .addComponent(btnComprarCripto)
-                        .addGap(49, 49, 49)
-                        .addComponent(btnVenderCripto)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(48, 48, 48))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(100, 100, 100))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(28, 28, 28)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel2)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(45, 45, 45)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(83, 83, 83)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnVenderCripto)
-                            .addComponent(btnComprarCripto))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(69, 69, 69)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                .addGap(105, 105, 105)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -263,49 +366,48 @@ public class Cripto extends javax.swing.JFrame {
         c.vendeCripto(getTblCriptos());
     }//GEN-LAST:event_btnVenderCriptoActionPerformed
 
+    private void btnComprarCriptoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprarCriptoMouseEntered
+        btnComprarCripto.setBackground(new Color(50,153,254));
+        btnComprarCripto.setForeground(new Color(42,42,42));
+        btnComprarCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(42, 42, 42), 2, false));
+    }//GEN-LAST:event_btnComprarCriptoMouseEntered
+
+    private void btnComprarCriptoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnComprarCriptoMouseExited
+        btnComprarCripto.setBackground(new Color(42,42,42));
+        btnComprarCripto.setForeground(new Color(50,153,254));
+        btnComprarCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50,153,254), 1, false));
+    }//GEN-LAST:event_btnComprarCriptoMouseExited
+
+    private void btnVenderCriptoMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVenderCriptoMouseEntered
+        btnVenderCripto.setBackground(new Color(50,153,254));
+        btnVenderCripto.setForeground(new Color(42,42,42));
+        btnVenderCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(42, 42, 42), 2, false));
+    }//GEN-LAST:event_btnVenderCriptoMouseEntered
+
+    private void btnVenderCriptoMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnVenderCriptoMouseExited
+        btnVenderCripto.setBackground(new Color(42,42,42));
+        btnVenderCripto.setForeground(new Color(50,153,254));
+        btnVenderCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50,153,254), 1, false));
+    }//GEN-LAST:event_btnVenderCriptoMouseExited
+
    
-//    public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(Cripto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(Cripto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(Cripto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(Cripto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new Cripto().setVisible(true);
-//            }
-//        });
-//    }
+    ControllerOperacoes cOperacoes;
     ControllerCripto c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnComprarCripto;
     private javax.swing.JToggleButton btnVenderCripto;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
     private javax.swing.JLabel lblHome1;
+    private javax.swing.JLabel lblSaldo;
     private javax.swing.JTable tblCriptos;
     private javax.swing.JTable tblCriptosUser;
     // End of variables declaration//GEN-END:variables

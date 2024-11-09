@@ -13,7 +13,7 @@ public class Administrador extends javax.swing.JFrame {
         
         lblQtdUsuarios.setText(String.valueOf(c.getQntdUsuarios())); 
         
-        this.getContentPane().setBackground(new Color(228,228,228));
+        this.getContentPane().setBackground(new Color(42,42,42));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
 
@@ -40,9 +40,9 @@ public class Administrador extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        btnSair.setBackground(new java.awt.Color(153, 153, 255));
+        btnSair.setBackground(new java.awt.Color(63, 63, 63));
         btnSair.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        btnSair.setForeground(new java.awt.Color(255, 255, 255));
+        btnSair.setForeground(new java.awt.Color(102, 153, 255));
         btnSair.setText("Sair");
         btnSair.setBorder(javax.swing.BorderFactory.createEtchedBorder());
         btnSair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -55,10 +55,10 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(102, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(63, 63, 63));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnCadastrar.setBackground(new java.awt.Color(255, 255, 255));
+        btnCadastrar.setBackground(new java.awt.Color(63, 63, 63));
         btnCadastrar.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnCadastrar.setForeground(new java.awt.Color(102, 153, 255));
         btnCadastrar.setText("Cadastrar Investidor");
@@ -70,7 +70,7 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        btnExcluir.setBackground(new java.awt.Color(255, 255, 255));
+        btnExcluir.setBackground(new java.awt.Color(63, 63, 63));
         btnExcluir.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnExcluir.setForeground(new java.awt.Color(102, 153, 255));
         btnExcluir.setText("Excluir Investidor");
@@ -82,7 +82,7 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        btnConsultarSaldo.setBackground(new java.awt.Color(255, 255, 255));
+        btnConsultarSaldo.setBackground(new java.awt.Color(63, 63, 63));
         btnConsultarSaldo.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnConsultarSaldo.setForeground(new java.awt.Color(102, 153, 255));
         btnConsultarSaldo.setText("Consultar Saldo");
@@ -96,7 +96,7 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        btnConsultarExtrato.setBackground(new java.awt.Color(255, 255, 255));
+        btnConsultarExtrato.setBackground(new java.awt.Color(63, 63, 63));
         btnConsultarExtrato.setFont(new java.awt.Font("SansSerif", 1, 12)); // NOI18N
         btnConsultarExtrato.setForeground(new java.awt.Color(102, 153, 255));
         btnConsultarExtrato.setText("Consultar Extrato");
@@ -111,7 +111,7 @@ public class Administrador extends javax.swing.JFrame {
         });
 
         jLabel1.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setForeground(new java.awt.Color(102, 153, 255));
         jLabel1.setText("Área do Investidor");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -151,19 +151,19 @@ public class Administrador extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE))
         );
 
-        jPanel2.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel2.setBackground(new java.awt.Color(63, 63, 63));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel2.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel2.setForeground(new java.awt.Color(102, 153, 255));
         jLabel2.setText("Dados CriptoFEI");
 
         jLabel3.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel3.setForeground(new java.awt.Color(102, 153, 255));
         jLabel3.setText("Quantidade de usuários: ");
 
         lblQtdUsuarios.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        lblQtdUsuarios.setForeground(new java.awt.Color(255, 255, 255));
+        lblQtdUsuarios.setForeground(new java.awt.Color(102, 153, 255));
         lblQtdUsuarios.setText("usuarios");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -192,11 +192,11 @@ public class Administrador extends javax.swing.JFrame {
                 .addContainerGap(434, Short.MAX_VALUE))
         );
 
-        jPanel3.setBackground(new java.awt.Color(0, 102, 204));
+        jPanel3.setBackground(new java.awt.Color(63, 63, 63));
         jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        btnCadastrarCripto.setBackground(new java.awt.Color(255, 255, 255));
-        btnCadastrarCripto.setForeground(new java.awt.Color(0, 102, 204));
+        btnCadastrarCripto.setBackground(new java.awt.Color(63, 63, 63));
+        btnCadastrarCripto.setForeground(new java.awt.Color(102, 153, 255));
         btnCadastrarCripto.setText("Cadastrar Cripto");
         btnCadastrarCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnCadastrarCripto.setFocusable(false);
@@ -208,8 +208,8 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        btnExcluirCripto.setBackground(new java.awt.Color(255, 255, 255));
-        btnExcluirCripto.setForeground(new java.awt.Color(0, 102, 204));
+        btnExcluirCripto.setBackground(new java.awt.Color(63, 63, 63));
+        btnExcluirCripto.setForeground(new java.awt.Color(102, 153, 255));
         btnExcluirCripto.setText("Excluir Cripto");
         btnExcluirCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btnExcluirCripto.setFocusable(false);
@@ -221,8 +221,8 @@ public class Administrador extends javax.swing.JFrame {
             }
         });
 
-        btnCotacao.setBackground(new java.awt.Color(255, 255, 255));
-        btnCotacao.setForeground(new java.awt.Color(0, 102, 204));
+        btnCotacao.setBackground(new java.awt.Color(63, 63, 63));
+        btnCotacao.setForeground(new java.awt.Color(102, 153, 255));
         btnCotacao.setText("Atualizar Cotação");
         btnCotacao.setToolTipText("");
         btnCotacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -236,7 +236,7 @@ public class Administrador extends javax.swing.JFrame {
         });
 
         jLabel4.setFont(new java.awt.Font("SansSerif", 1, 18)); // NOI18N
-        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setForeground(new java.awt.Color(102, 153, 255));
         jLabel4.setText("Área de Criptos");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);

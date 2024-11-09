@@ -276,7 +276,7 @@ public class Carteira extends javax.swing.JFrame {
         jScrollPane1.setForeground(new java.awt.Color(42, 42, 42));
         jScrollPane1.setToolTipText("");
 
-        tblExtrato.setBackground(new java.awt.Color(63, 63, 63));
+        tblExtrato.setBackground(new java.awt.Color(42, 42, 42));
         tblExtrato.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
         tblExtrato.setForeground(new java.awt.Color(255, 255, 255));
         tblExtrato.setModel(new javax.swing.table.DefaultTableModel(
@@ -310,6 +310,7 @@ public class Carteira extends javax.swing.JFrame {
             }
         });
         tblExtrato.setEnabled(false);
+        tblExtrato.setGridColor(new java.awt.Color(255, 255, 255));
         tblExtrato.setOpaque(false);
         tblExtrato.setRowHeight(30);
         tblExtrato.setShowGrid(true);
