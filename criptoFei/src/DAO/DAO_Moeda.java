@@ -165,6 +165,7 @@ public class DAO_Moeda {
         BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
         BigDecimal taxaCompra = getTaxa(moeda.getSimbolo(), false);
         valorCompra = valorCompra.multiply(BigDecimal.ONE.add(taxaCompra));
+        
 
         BigDecimal saldoBRL = getSaldo(idUser, "BRL");
         if (saldoBRL.compareTo(valorCompra) < 0) {

@@ -111,11 +111,14 @@ public class ControllerCripto {
                     if (confirmacao == JOptionPane.YES_OPTION) {
                         Moeda moeda = new Moeda(simbolo, nome, cotacao);
                         SessionManager sm = new SessionManager();
-                        dao.comprarMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
+                        String msg = dao.comprarMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
                         view.atualizarCriptosUsuarios();
                         view.atualizarCriptos();
-                        
-                        JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
+                        if(msg.startsWith("Erro")) {
+                            JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
+                        }                       
                     } else {
                         JOptionPane.showMessageDialog(null, "Compra cancelada.");
                     }
