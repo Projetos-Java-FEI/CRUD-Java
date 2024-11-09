@@ -2,11 +2,17 @@ package controller;
 
 import DAO.Conexao;
 import DAO.DAO_Usuario;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import javax.swing.Box;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import model.User;
-import util.SessionManager;
+import service.SessionManager;
 import view.Carteira;
 
 
@@ -14,6 +20,7 @@ import view.Carteira;
 public class ControllerOperacoes {
     private Carteira view;
     private User user;
+ 
 
     public ControllerOperacoes(Carteira view, User user) {
         this.view = view;
@@ -24,41 +31,100 @@ public class ControllerOperacoes {
     }
     
     
-    public void realizarDeposito() {
+public void realizarDeposito(){
         
         Conexao conexao = new Conexao();
         
-        try {
-            Connection conn = conexao.getConnection();
-            DAO_Usuario dao = new DAO_Usuario(conn);
-            User user1 = SessionManager.getUser();
-            dao.depositar(user1);
-            view.setSaldo(getSaldo());
-            
-            // chama a função para atualizar o extrato no view após a operação
-            view.atualizarExtrato(); 
-            
+        JPanel panel = new JPanel();
+        JTextField valorField = new JTextField(10); // Campo para o valor a ser depositado
+        JPasswordField senhaField = new JPasswordField(10); // Campo para a senha
 
-        } catch(SQLException e) {            
-            JOptionPane.showMessageDialog(view, "Depósito não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
+        panel.add(new JLabel("Valor do Depósito:"));
+        panel.add(valorField);
+        panel.add(Box.createVerticalStrut(15)); // Espaço entre os campos
+        panel.add(new JLabel("Senha:"));
+        panel.add(senhaField);
+        
+        int option = JOptionPane.showConfirmDialog(null, panel, "Depósito em Conta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            // Obtem o valor e a senha inseridos pelo usuário
+            BigDecimal valor;
+            try {
+                Connection conn = conexao.getConnection();
+                DAO_Usuario dao = new DAO_Usuario(conn);
+                try {
+                    valor = new BigDecimal(valorField.getText());
+                    String senha = new String(senhaField.getPassword());
+
+                    if(dao.verificarSenha(senha)) {
+                        String msg = dao.depositar(SessionManager.getUser(), valor);
+                        view.setSaldo(getSaldo());
+                        view.atualizarExtrato(); 
+                        
+                        if(msg.startsWith("Erro")) {
+                            JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, msg);
+                        }
+
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Valor de depósito inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException e) {
+               e.printStackTrace();
+            }
         }
     }
+
     public void realizarSaque() {
-        
         Conexao conexao = new Conexao();
-        
-        try {
-            Connection conn = conexao.getConnection();
-            DAO_Usuario dao = new DAO_Usuario(conn);
-            User user1 = SessionManager.getUser();
-            dao.sacar(user1);
-            view.setSaldo(getSaldo());
-            view.atualizarExtrato(); 
+        JPanel panel = new JPanel();
+        JTextField valorField = new JTextField(10);
+        JPasswordField senhaField = new JPasswordField(10);
 
-        } catch(SQLException e) {            
-            JOptionPane.showMessageDialog(view, "Saque não realizado!", "Erro", JOptionPane.ERROR_MESSAGE);
+        panel.add(new JLabel("Valor do Saque:"));
+        panel.add(valorField);
+        panel.add(Box.createVerticalStrut(15));
+        panel.add(new JLabel("Senha:"));
+        panel.add(senhaField);
+
+        int option = JOptionPane.showConfirmDialog(null, panel, "Saque em Conta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (option == JOptionPane.OK_OPTION) {
+            try {
+                Connection conn = conexao.getConnection();
+                DAO_Usuario dao = new DAO_Usuario(conn);
+                try {
+                    BigDecimal valor = new BigDecimal(valorField.getText());
+                    String senha = new String(senhaField.getPassword());
+
+                    if (dao.verificarSenha(senha)) {
+                        String msg = dao.sacar(SessionManager.getUser(), valor);
+                        view.setSaldo(getSaldo());
+                        view.atualizarExtrato();
+
+                        if (msg.startsWith("Erro")) {
+                            JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null, msg);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                    }
+                } catch (NumberFormatException e) {
+                    JOptionPane.showMessageDialog(null, "Valor de saque inválido", "Erro", JOptionPane.ERROR_MESSAGE);
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+
     
     public String getSaldo() {
         
@@ -68,7 +134,7 @@ public class ControllerOperacoes {
             Connection conn = conexao.getConnection();
             DAO_Usuario dao = new DAO_Usuario(conn);
             String saldoFormatado = String.format("%.2f", 
-    dao.obterSaldoReais(SessionManager.getUser().getId()).doubleValue()); 
+            dao.obterSaldoReais(SessionManager.getUser().getId()).doubleValue()); 
             
             return saldoFormatado;
 
@@ -77,4 +143,6 @@ public class ControllerOperacoes {
         }
         return "inválido";
     }
+    
+    
 }

@@ -7,7 +7,8 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import model.User;
-import util.SessionManager;
+import service.SessionManager;
+import view.Administrador;
 import view.Login;
 import view.TelaUsuario;
 
@@ -46,13 +47,23 @@ public class ControllerLogin {
                 String nome = res.getString("nome");
                 String usuario = res.getString("cpf"); // ou o que você considerar como usuário
                 String senha = res.getString("senha");
-
-                // Criamos o objeto User com o ID
-                User user1 = new User(id, nome, usuario, senha, "Investidor"); // Defina o tipo de usuário conforme necessário
-                SessionManager.setUser(user1);
-                TelaUsuario userTela = new TelaUsuario();
-                view.dispose();
-                userTela.setVisible(true);
+                String tipoUsuario = res.getString("user_type");
+                
+                if(tipoUsuario.equals("Administrador")) {
+                    User user1 = new User(id, nome, usuario, senha, "Administrador");
+                    SessionManager.setUser(user1);
+                    Administrador telaAdm = new Administrador();
+                    view.dispose();
+                    telaAdm.setVisible(true);
+                    
+                } else { 
+                    User user1 = new User(id, nome, usuario, senha, "Investidor"); // Defina o tipo de usuário conforme necessário
+                    SessionManager.setUser(user1);
+                    TelaUsuario userTela = new TelaUsuario();
+                    view.dispose();
+                    userTela.setVisible(true);
+                    
+                }
 
             } else {
                 // Dando errado modal de Login não efetuado

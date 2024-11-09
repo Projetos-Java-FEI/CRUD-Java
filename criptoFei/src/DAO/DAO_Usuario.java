@@ -3,7 +3,6 @@ package DAO;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -11,17 +10,10 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import javax.swing.Box;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
 import model.User;
+import service.SessionManager;
 import service.extratoService;
 import service.cotacaoService;
-
-
 
 
 public class DAO_Usuario {
@@ -38,6 +30,18 @@ public class DAO_Usuario {
         statement.setString(2, user.getSenha());
         return statement.executeQuery();
     }
+    
+    public boolean verificarSenha(String senha) throws SQLException {
+        String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
+        try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
+            verifyStmt.setInt(1, SessionManager.getUser().getId());
+            verifyStmt.setString(2, senha);
+
+            try (ResultSet rs = verifyStmt.executeQuery()) {
+                return rs.next();
+            }
+        }
+    }
 
     
     public void cadastro(User user) throws SQLException {
@@ -53,15 +57,20 @@ public class DAO_Usuario {
             statement.executeUpdate();
 
             // Obter o ID do usuário recém-criado
-            int userId = getUserId(user.getCpf()); // Método para obter o ID do usuário baseado no CPF
+            int userId = getUserId(user.getCpf()); // método para obter o ID do usuário baseado no CPF
 
-            // Criar carteira para o usuário
-            String sqlInsertCarteira = "INSERT INTO carteira (id_user) VALUES (?)"; // Não é necessário especificar o saldo se for default
+            String sqlInsertCarteira = "INSERT INTO carteira (id_user, simbolo, saldo) VALUES (?, ?, ?)";
+            
             try (PreparedStatement statementCarteira = conn.prepareStatement(sqlInsertCarteira)) {
-                statementCarteira.setInt(1, userId);
-                statementCarteira.executeUpdate();
                 
-            }       
+            String[] criptos = {"BTC", "ETH", "XRP", "BRL"};
+            for (String cripto : criptos) {
+                statementCarteira.setInt(1, userId);
+                statementCarteira.setString(2, cripto);
+                statementCarteira.setBigDecimal(3, BigDecimal.ZERO); // saldo inicial zero para cada cripto
+                statementCarteira.executeUpdate();
+            }
+        }              
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -69,205 +78,77 @@ public class DAO_Usuario {
         }
 }
 
-    
+    public String depositar(User user, BigDecimal valor) throws SQLException {  
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo + ? WHERE id_user = ? AND simbolo = 'BRL'";
 
-    public void depositar(User user) throws SQLException {
-        // Cria um painel com os campos de entrada
-        JPanel panel = new JPanel();
-        JTextField valorField = new JTextField(10); // Campo para o valor a ser depositado
-        JPasswordField senhaField = new JPasswordField(10); // Campo para a senha
+        try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
+            statement.setBigDecimal(1, valor);
+            statement.setInt(2, user.getId());
 
-        panel.add(new JLabel("Valor do Depósito:"));
-        panel.add(valorField);
-        panel.add(Box.createVerticalStrut(15)); // Espaço entre os campos
-        panel.add(new JLabel("Senha:"));
-        panel.add(senhaField);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                String tipoOp = String.format("+ R$ %s", valor.toString());
 
-        int option = JOptionPane.showConfirmDialog(null, panel, "Depósito em Conta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                // Registrar operação no extrato
+                extratoService extratoService = new extratoService(conn);
+                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
 
-        if (option == JOptionPane.OK_OPTION) {
-            // Obtem o valor e a senha inseridos pelo usuário
-            BigDecimal valor;
-            try {
-                valor = new BigDecimal(valorField.getText());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Valor de depósito inválido.");
-                return;
+                // Atualiza as cotações das criptos
+                cotacaoService cotacaoService = new cotacaoService(conn);
+                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o depósito
+                return "Depósito realizado com sucesso! Valor depositado: R$ " + valor;
+
+            } else {
+                return "Erro -> Falha ao realizar o depósito. Usuário não encontrado ou saldo não disponível.";
             }
-
-            String senha = new String(senhaField.getPassword());
-
-            // Verifica a senha antes de proceder com o depósito
-            String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
-
-            try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
-                verifyStmt.setInt(1, user.getId());
-                verifyStmt.setString(2, senha);
-
-                try (ResultSet rs = verifyStmt.executeQuery()) {
-                    if (rs.next()) {
-                        // Se a senha estiver correta, realiza o depósito
-                        String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real + ? WHERE id_user = ?";
-
-                        try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
-                            statement.setBigDecimal(1, valor);
-                            statement.setInt(2, user.getId());
-
-                            int rowsUpdated = statement.executeUpdate();
-                            if (rowsUpdated > 0) {
-                                JOptionPane.showMessageDialog(null, "Depósito realizado com sucesso! Valor depositado: R$ " + valor);
-                                String tipoOp = String.format("+ R$ %s", valor.toString());
-
-                                // Registrar operação no extrato
-                                extratoService extratoService = new extratoService(conn);
-                                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Depósito BRL", LocalDateTime.now().withNano(0));
-
-                                // Atualiza as cotações das criptos
-                                cotacaoService cotacaoService = new cotacaoService(conn);
-                                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o depósito
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Falha ao realizar o depósito. Usuário não encontrado.");
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Senha incorreta. Depósito não realizado.");
-                    }
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
         }
     }
 
-    public void sacar(User user) throws SQLException {
-        // Cria um painel com os campos de entrada
-        JPanel panel = new JPanel();
-        JTextField valorField = new JTextField(10); // Campo para o valor a ser depositado
-        JPasswordField senhaField = new JPasswordField(10); // Campo para a senha
+    public String sacar(User user, BigDecimal valor) throws SQLException {
+        String sqlCheckSaldo = "SELECT saldo FROM carteira WHERE id_user = ? AND simbolo = 'BRL'";
+        String sqlUpdateSaldo = "UPDATE carteira SET saldo = saldo - ? WHERE id_user = ? AND simbolo = 'BRL'";
 
-        panel.add(new JLabel("Valor do Saque:"));
-        panel.add(valorField);
-        panel.add(Box.createVerticalStrut(15)); // Espaço entre os campos
-        panel.add(new JLabel("Senha:"));
-        panel.add(senhaField);
+        try (PreparedStatement checkStmt = conn.prepareStatement(sqlCheckSaldo)) {
+            checkStmt.setInt(1, user.getId());
 
-        int option = JOptionPane.showConfirmDialog(null, panel, "Saque em Conta", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+            try (ResultSet rs = checkStmt.executeQuery()) {
+                if (rs.next()) {
+                    BigDecimal saldoAtual = rs.getBigDecimal("saldo");
 
-        if (option == JOptionPane.OK_OPTION) {
-            // Obtem o valor e a senha inseridos pelo usuário
-            BigDecimal valor;
-            try {
-                valor = new BigDecimal(valorField.getText());
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(null, "Valor de saque inválido.");
-                return;
-            }
-
-            String senha = new String(senhaField.getPassword());
-
-            // Verifica a senha antes de proceder com o saque
-            String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
-
-            try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
-                verifyStmt.setInt(1, user.getId());
-                verifyStmt.setString(2, senha);
-
-                try (ResultSet rs = verifyStmt.executeQuery()) {
-                    if (rs.next()) {
-                        // Se a senha estiver correta, realiza o saque
-                        String sqlUpdateSaldo = "UPDATE carteira SET saldo_real = saldo_real - ? WHERE id_user = ?";
-
-                        try (PreparedStatement statement = conn.prepareStatement(sqlUpdateSaldo)) {
-                            statement.setBigDecimal(1, valor);
-                            statement.setInt(2, user.getId());
-
-                            int rowsUpdated = statement.executeUpdate();
-                            if (rowsUpdated > 0) {
-                                String tipoOp = String.format("- R$ %s", valor.toString());
-
-                                // Registrar operação no extrato
-                                extratoService extratoService = new extratoService(conn);
-                                extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
-                                JOptionPane.showMessageDialog(null, "Saque realizado com sucesso! Valor do saque: R$ " + valor);
-
-                                // Atualiza as cotações das criptos
-                                cotacaoService cotacaoService = new cotacaoService(conn);
-                                cotacaoService.atualizarCotacoes(); // Atualiza as cotações após o saque
-                                
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Falha ao realizar o saque. Usuário não encontrado.");
-                            }
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Senha incorreta. Saque não realizado.");
+                    if (saldoAtual.compareTo(valor) < 0) {
+                        return "Erro -> Saldo insuficiente para realizar o saque.";
                     }
+
+                    try (PreparedStatement updateStmt = conn.prepareStatement(sqlUpdateSaldo)) {
+                        updateStmt.setBigDecimal(1, valor);
+                        updateStmt.setInt(2, user.getId());
+
+                        int rowsUpdated = updateStmt.executeUpdate();
+                        if (rowsUpdated > 0) {
+                            String tipoOp = String.format("- R$ %s", valor.toString());
+
+                            // Registrar operação no extrato
+                            extratoService extratoService = new extratoService(conn);
+                            extratoService.registrarExtrato(user.getId(), valor, tipoOp, "Saque BRL", LocalDateTime.now().withNano(0));
+
+                            // Atualiza as cotações das criptos
+                            cotacaoService cotacaoService = new cotacaoService(conn);
+                            cotacaoService.atualizarCotacoes();
+                            return "Saque realizado com sucesso! Valor sacado: R$ " + valor;
+                        }
+                    }
+                } else {
+                    return "Erro -> Usuário não encontrado.";
                 }
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return "Erro -> Falha ao realizar o saque.";
         }
+        return "Erro -> Operação falhou.";
     }
 
 
-
-       
-    //Esse excluir vai servir futuramente para o ADM, o investidor não utiliza
-    //esse método.
-    
-    public void excluir() throws SQLException {
-        // Painel para entrada do CPF
-        JPanel panel = new JPanel();
-        JTextField cpfField = new JTextField(11);
-        panel.add(cpfField);
-        int option = JOptionPane.showConfirmDialog(null, panel, "Digite o CPF do usuário a ser excluído", JOptionPane.OK_CANCEL_OPTION);
-
-        if (option == JOptionPane.OK_OPTION) {
-            String cpf = cpfField.getText();
-
-            // Consulta para verificar se o CPF existe e obter os dados do usuário
-            String sqlCheck = "SELECT nome, user_type FROM users WHERE cpf = ?";
-            try (PreparedStatement stmtCheck = conn.prepareStatement(sqlCheck)) {
-                stmtCheck.setString(1, cpf);
-                try (ResultSet rs = stmtCheck.executeQuery()) {
-                    if (rs.next()) {
-                        // Exibe os dados do usuário encontrados e pergunta se deseja excluir
-                        String nome = rs.getString("nome");
-                        String userType = rs.getString("user_type");
-                        int confirm = JOptionPane.showConfirmDialog(
-                                null,
-                                "Deseja realmente excluir o usuário?\nNome: " + nome + "\nTipo: " + userType,
-                                "Confirmação de Exclusão",
-                                JOptionPane.YES_NO_OPTION,
-                                JOptionPane.WARNING_MESSAGE
-                        );
-
-                        if (confirm == JOptionPane.YES_OPTION) {
-                            // Se confirmado, exclui o usuário
-                            String sqlDelete = "DELETE FROM users WHERE cpf = ?";
-                            try (PreparedStatement stmtDelete = conn.prepareStatement(sqlDelete)) {
-                                stmtDelete.setString(1, cpf);
-                                int rowsDeleted = stmtDelete.executeUpdate();
-                                if (rowsDeleted > 0) {
-                                    JOptionPane.showMessageDialog(null, "Usuário excluído com sucesso.");
-                                } else {
-                                    JOptionPane.showMessageDialog(null, "Erro ao excluir o usuário.");
-                                }
-                            }
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Exclusão cancelada.");
-                        }
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Usuário com CPF " + cpf + " não encontrado.");
-                    }
-                }
-            } catch (SQLException e) {
-                JOptionPane.showMessageDialog(null, "Erro ao buscar usuário: " + e.getMessage());
-                throw e;
-            }
-        } else {
-            JOptionPane.showMessageDialog(null, "Operação cancelada.");
-        }
-    }
 
         // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
@@ -286,24 +167,26 @@ public class DAO_Usuario {
     public BigDecimal obterSaldoReais(int userId) {
         BigDecimal saldo = BigDecimal.ZERO;  // variável para armazenar o saldo
 
-        String sql = "SELECT saldo_real FROM carteira WHERE id_user = ?";
-        
+        // Consulta para obter o saldo da moeda 'BRL' na carteira do usuário
+        String sql = "SELECT saldo FROM carteira WHERE id_user = ? AND simbolo = 'BRL'";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, userId);  
-            
+
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    saldo = rs.getBigDecimal("saldo_real"); 
+                    saldo = rs.getBigDecimal("saldo"); 
                 } else {
-                    System.out.println("Usuário não encontrado.");
+                    System.out.println("Saldo em Reais (BRL) não encontrado para o usuário.");
                 }
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        
+
         return saldo;
     }
+
    
     public void extrato(int idUser, BigDecimal quantidade, String tipoOp, String tipoOperacao, LocalDateTime date) throws SQLException {
         String sqlInsertOp = "INSERT INTO extrato (id_user, quantidade, operacao_reais, tipo_operacao, data)"
@@ -351,5 +234,7 @@ public class DAO_Usuario {
         
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
+    
+    
     
 }

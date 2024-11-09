@@ -3,7 +3,15 @@ package model;
 
 public class Moeda extends Carteira {
     private String simbolo, nome;
-    private double cotacao, tax;
+    private double cotacao, taxCompra, taxVenda;
+
+    public Moeda(String simbolo, String nome, double cotacao) {
+        this.simbolo = simbolo;
+        this.nome = nome;
+        this.cotacao = cotacao;
+    }
+    
+    
 
     public String getSimbolo() {
         return simbolo;
@@ -29,17 +37,20 @@ public class Moeda extends Carteira {
         this.cotacao = cotacao;
     }
 
-    public double getTax() {
-        return tax;
+    public double getTaxCompra() {
+        return taxCompra;
     }
 
-    public void setTax(double tax) {
-        this.tax = tax;
+    public void setTaxCompra(double taxCompra) {
+        this.taxCompra = taxCompra;
     }
-    
-    
-    
-    
-    
+
+    public double getTaxVenda() {
+        return taxVenda;
+    }
+
+    public void setTaxVenda(double taxVenda) {
+        this.taxVenda = taxVenda;
+    }
     
 }
