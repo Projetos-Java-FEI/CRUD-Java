@@ -80,7 +80,7 @@ public class ControllerAdmin {
 
         if (option == JOptionPane.OK_OPTION) {
             // Obtém e valida os dados inseridos pelo usuário
-            String simbolo = simboloField.getText();
+            String simbolo = simboloField.getText().toUpperCase();
             String nome = nomeField.getText();
             BigDecimal cotacao;
             BigDecimal taxaCompra;
@@ -133,7 +133,7 @@ public class ControllerAdmin {
 
         if (option == JOptionPane.OK_OPTION) {
             // Obtém o símbolo da moeda e a senha inseridos pelo usuário
-            String simbolo = simboloField.getText();
+            String simbolo = simboloField.getText().toUpperCase();
             String senha = new String(senhaField.getPassword());
 
             // Criando o objeto User

@@ -3,6 +3,7 @@ package view;
 import controller.ControllerExtrato;
 import controller.ControllerOperacoes;
 import java.awt.Color;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import model.User;
 import javax.swing.JTable;
@@ -10,7 +11,7 @@ import service.SessionManager;
 
 public class Carteira extends javax.swing.JFrame {
 
-    public Carteira() {
+    public Carteira() throws SQLException {
         initComponents();
         cExtrato = new ControllerExtrato(this);
         cExtrato.carregarExtrato();
@@ -22,6 +23,9 @@ public class Carteira extends javax.swing.JFrame {
         lblCPF.setText(user.formatarCpf(user.getCpf()));
         
         lblSaldo.setText(c.getSaldo().toString());
+        
+        c.mostrarGrafico(SessionManager.getUser().getId(), panelDivisao);
+        
         
         this.getContentPane().setBackground(new Color(42,42,42));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
@@ -45,8 +49,6 @@ public class Carteira extends javax.swing.JFrame {
         lblCPF = new javax.swing.JLabel();
         btnSacar = new javax.swing.JButton();
         panelDivisao = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        btnConsultarSaldo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblExtrato = new javax.swing.JTable();
@@ -230,43 +232,15 @@ public class Carteira extends javax.swing.JFrame {
         panelDivisao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelDivisao.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("DIVISÃO DO DINHEIRO");
-
-        btnConsultarSaldo.setBackground(new java.awt.Color(42, 42, 42));
-        btnConsultarSaldo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        btnConsultarSaldo.setForeground(new java.awt.Color(50, 153, 254));
-        btnConsultarSaldo.setText("Saldo Total");
-        btnConsultarSaldo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50, 153, 254), 1, true));
-        btnConsultarSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConsultarSaldo.setFocusPainted(false);
-        btnConsultarSaldo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConsultarSaldoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelDivisaoLayout = new javax.swing.GroupLayout(panelDivisao);
         panelDivisao.setLayout(panelDivisaoLayout);
         panelDivisaoLayout.setHorizontalGroup(
             panelDivisaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 417, Short.MAX_VALUE)
         );
         panelDivisaoLayout.setVerticalGroup(
             panelDivisaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
-                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 214, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new java.awt.Color(63, 63, 63));
@@ -385,6 +359,8 @@ public class Carteira extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    
+        
     public void atualizarExtrato() {
         cExtrato.carregarExtrato();
     }
@@ -423,10 +399,6 @@ public class Carteira extends javax.swing.JFrame {
         c.realizarSaque();
     }//GEN-LAST:event_btnSacarActionPerformed
 
-    private void btnConsultarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarSaldoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnConsultarSaldoActionPerformed
-
     private void btnTransferirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransferirMouseEntered
         btnTransferir.setBackground(new Color(50,153,254));
         btnTransferir.setForeground(new Color(42,42,42));
@@ -457,11 +429,9 @@ public class Carteira extends javax.swing.JFrame {
     private ControllerExtrato cExtrato;
     private ControllerOperacoes c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConsultarSaldo;
     private javax.swing.JButton btnSacar;
     private javax.swing.JButton btnTransferir;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
