@@ -11,6 +11,7 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import model.User;
+import org.mindrot.jbcrypt.BCrypt;
 import service.SessionManager;
 import service.extratoService;
 import service.cotacaoService;
@@ -31,17 +32,22 @@ public class DAO_Usuario {
         return statement.executeQuery();
     }
     
-    public boolean verificarSenha(String senha) throws SQLException {
-        String sqlVerifySenha = "SELECT 1 FROM users WHERE id_user = ? AND senha = ?";
+
+    public boolean verificarSenha(String senhaFornecida) throws SQLException {
+        String sqlVerifySenha = "SELECT senha FROM users WHERE id_user = ?";
         try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
             verifyStmt.setInt(1, SessionManager.getUser().getId());
-            verifyStmt.setString(2, senha);
 
             try (ResultSet rs = verifyStmt.executeQuery()) {
-                return rs.next();
+                if (rs.next()) {
+                    String senhaHash = rs.getString("senha"); // Recupera o hash da senha
+                    return BCrypt.checkpw(senhaFornecida, senhaHash); // Compara a senha fornecida com o hash
+                }
             }
         }
+        return false; // Retorna falso se o usuário não foi encontrado ou se a senha está incorreta
     }
+
 
     
     public void cadastro(User user) throws SQLException {
@@ -234,6 +240,32 @@ public class DAO_Usuario {
         
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
+    
+     public boolean autenticar(String cpf, String senhaInserida) throws SQLException {
+        String sql = "SELECT senha FROM users WHERE cpf = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cpf);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    String senhaArmazenada = rs.getString("senha");
+                    // Verifica se a senha inserida corresponde ao hash armazenado
+                    return BCrypt.checkpw(senhaInserida, senhaArmazenada);
+                }
+            }
+        }
+        return false;  // Retorna falso se o CPF não foi encontrado
+    }
+     
+    public ResultSet buscarUsuarioPorCpf(User user) throws SQLException {
+        String sql = "SELECT * FROM users WHERE cpf = ?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setString(1, user.getCpf());
+        return statement.executeQuery();
+    }
+
+
+    
+    
     
     
     
