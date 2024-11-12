@@ -66,10 +66,12 @@ public class ControllerLogin {
                 if ("Administrador".equals(tipoUsuario)) {
                     Administrador telaAdm = new Administrador();
                     view.dispose();
+                    telaAdm.setLocationRelativeTo(null);
                     telaAdm.setVisible(true);
                 } else {
                     TelaUsuario userTela = new TelaUsuario();
                     view.dispose();
+                    userTela.setLocationRelativeTo(null);
                     userTela.setVisible(true);
                 }
             } else {

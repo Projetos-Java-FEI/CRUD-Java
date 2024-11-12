@@ -243,6 +243,7 @@ public class DAO_Usuario {
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
     
+    
      public boolean autenticar(String cpf, String senhaInserida) throws SQLException {
         String sql = "SELECT senha FROM users WHERE cpf = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {

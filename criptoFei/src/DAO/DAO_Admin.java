@@ -5,7 +5,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
-import model.User;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 public class DAO_Admin {
     private Connection conn;
@@ -102,23 +105,33 @@ public class DAO_Admin {
         return 0;
     }
     
-    public double getSaldos(User user) throws SQLException {
-        String sql = "SELECT saldo_real, saldo_btc, saldo_eth, saldo_xrp FROM carteira WHERE id_user = ?";
-                        
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-                stmt.setInt(1, user.getId());
-                try (ResultSet rsSaldo = stmt.executeQuery()) {
-                    if (rsSaldo.next()) {
-                        double saldoReal = rsSaldo.getDouble("saldo_real");
-                        double saldoBtc = rsSaldo.getDouble("saldo_btc");
-                        double saldoEth = rsSaldo.getDouble("saldo_eth");
-                        double saldoXrp = rsSaldo.getDouble("saldo_xrp");
-                        
-                    }
-                } catch(SQLException e) {
-                    
-                }
+    
+    public ArrayList<Object[]> getExtratoCpf(String cpf) throws SQLException {
+        ArrayList listaExtrato = new ArrayList<>();
+        DAO_Usuario dao = new DAO_Usuario(conn);       
+        
+        String sql = "SELECT quantidade, operacao_reais, tipo_operacao, data FROM extrato WHERE id_user = ?";
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        stmt.setInt(1, dao.getUserId(cpf)); 
+        ResultSet rs = stmt.executeQuery();
+        
+        DecimalFormat decimalFormat = new DecimalFormat("#,##0.00"); 
+        // formatar o número para mostrar apenas com 2 casas decimais
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        // formata a data para tirar os nano segundos presentes na lib
+        
+        while(rs.next()) {
+            
+            Object[] extrato = new Object[4]; 
+            extrato[0] = decimalFormat.format(rs.getBigDecimal("quantidade")).toString();
+            extrato[1] = rs.getString("operacao_reais");
+            extrato[2] = rs.getString("tipo_operacao");
+            Timestamp timestamp = rs.getTimestamp("data");
+            extrato[3] = dateFormat.format(timestamp);
+            
+            listaExtrato.add(extrato);
         }
-       return 0;
+        
+        return listaExtrato; // retorna o arraylist com os valores do extrato
     }
 }

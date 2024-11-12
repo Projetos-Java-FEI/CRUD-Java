@@ -10,6 +10,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -279,6 +280,46 @@ public class ControllerAdmin {
         return (confirm == JOptionPane.YES_OPTION);
            
     }
+    
+    public void getExtratoUsuario() {
+        Conexao conn = new Conexao();
+        JPanel panel = new JPanel();
+        
+        JTextField simboloField = new JTextField(10);  // Campo para o símbolo da moeda
+        JPasswordField senhaField = new JPasswordField(10);  // Campo para a senha do usuário
 
+        panel.add(new JLabel("CPF do usuário:"));
+        panel.add(simboloField);
+        panel.add(Box.createVerticalStrut(15));
+        panel.add(new JLabel("Senha:"));
+        panel.add(senhaField);
+        
+        int option = JOptionPane.showConfirmDialog(null, panel, "Consultar Extrato", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+        String cpf = simboloField.getText();
+        String senha = new String(senhaField.getPassword());
+        
+        try {
+            Connection c = conn.getConnection();
+            DAO_Admin dao = new DAO_Admin(c);
+            ArrayList<Object[]> extrato = dao.getExtratoCpf(cpf);
+            
+            StringBuilder extratoStr = new StringBuilder("Extrato:\n");
+            for (Object[] dadosExtrato : extrato) {
+                extratoStr.append("Quantidade: ").append(dadosExtrato[0]).append(" | ")
+                          .append("Operação (R$): ").append(dadosExtrato[1]).append(" | ")
+                          .append("Tipo de Operação: ").append(dadosExtrato[2]).append(" | ")
+                          .append("Data: ").append(dadosExtrato[3]).append("\n\n");
+            }
+            
+            JOptionPane.showMessageDialog(null, extratoStr.toString(), "Extrato do Usuário", JOptionPane.INFORMATION_MESSAGE);
+            
+        } catch(SQLException e) {
+            JOptionPane.showMessageDialog(null, "Erro ao recuperar o extrato.", "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "Operação cancelada.");    
+            }
+    }
     
 }

@@ -11,7 +11,7 @@ import service.SessionManager;
 
 public class Carteira extends javax.swing.JFrame {
 
-    public Carteira() throws SQLException {
+    public Carteira() {
         initComponents();
         cExtrato = new ControllerExtrato(this);
         cExtrato.carregarExtrato();
@@ -24,7 +24,11 @@ public class Carteira extends javax.swing.JFrame {
         
         lblSaldo.setText(c.getSaldo().toString());
         
-        c.mostrarGrafico(SessionManager.getUser().getId(), panelDivisao);
+        try {
+            c.mostrarGrafico(SessionManager.getUser().getId(), panelDivisao);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
         
         
         this.getContentPane().setBackground(new Color(42,42,42));
@@ -54,6 +58,7 @@ public class Carteira extends javax.swing.JFrame {
         tblExtrato = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        lblSair = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -319,6 +324,14 @@ public class Carteira extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png"))); // NOI18N
 
+        lblSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botaoDesligar.png"))); // NOI18N
+        lblSair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSairMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -327,7 +340,9 @@ public class Carteira extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(1004, 1004, 1004))
+                .addGap(958, 958, 958)
+                .addComponent(lblSair)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -341,7 +356,9 @@ public class Carteira extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(lblSair))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -377,6 +394,7 @@ public class Carteira extends javax.swing.JFrame {
     
     private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
         TelaUsuario telaUser = new TelaUsuario();
+        telaUser.setLocationRelativeTo(null);
         telaUser.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblHome1MouseClicked
@@ -387,6 +405,7 @@ public class Carteira extends javax.swing.JFrame {
 
     private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
         Cripto cripto = new Cripto();
+        cripto.setLocationRelativeTo(null);
         cripto.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblCriptoMouseClicked
@@ -423,6 +442,12 @@ public class Carteira extends javax.swing.JFrame {
         btnSacar.setForeground(new Color(50,153,254));
         btnSacar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50,153,254), 1, false));
     }//GEN-LAST:event_btnSacarMouseExited
+
+    private void lblSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSairMouseClicked
+        Login l = new Login();
+        l.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblSairMouseClicked
     
                                         
 
@@ -443,6 +468,7 @@ public class Carteira extends javax.swing.JFrame {
     private javax.swing.JLabel lblCripto;
     private javax.swing.JLabel lblHome1;
     private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblSair;
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JPanel panelDivisao;
     private javax.swing.JPanel panelSaldo;

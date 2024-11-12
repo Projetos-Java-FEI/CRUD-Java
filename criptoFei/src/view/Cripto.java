@@ -5,6 +5,7 @@ import controller.ControllerOperacoes;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
+import java.sql.SQLException;
 
 public class Cripto extends javax.swing.JFrame {
     
@@ -57,6 +58,7 @@ public class Cripto extends javax.swing.JFrame {
         btnVenderCripto = new javax.swing.JToggleButton();
         jLabel3 = new javax.swing.JLabel();
         lblSaldo = new javax.swing.JLabel();
+        lblSair = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -107,7 +109,7 @@ public class Cripto extends javax.swing.JFrame {
                 .addComponent(lblCarteira)
                 .addGap(126, 126, 126)
                 .addComponent(lblCripto)
-                .addContainerGap(378, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -222,7 +224,6 @@ public class Cripto extends javax.swing.JFrame {
         tblCriptos.setSelectionForeground(new java.awt.Color(42, 42, 42));
         tblCriptos.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         tblCriptos.setShowGrid(true);
-        tblCriptos.setShowHorizontalLines(true);
         jScrollPane1.setViewportView(tblCriptos);
 
         btnComprarCripto.setBackground(new java.awt.Color(42, 42, 42));
@@ -310,6 +311,14 @@ public class Cripto extends javax.swing.JFrame {
                 .addGap(30, 30, 30))
         );
 
+        lblSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botaoDesligar.png"))); // NOI18N
+        lblSair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSairMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -319,19 +328,26 @@ public class Cripto extends javax.swing.JFrame {
                 .addGap(83, 83, 83)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(100, 100, 100))))
+                        .addGap(100, 100, 100))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblSair)
+                        .addGap(20, 20, 20))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jLabel2))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(15, 15, 15)
+                        .addComponent(lblSair)))
                 .addGap(105, 105, 105)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -345,12 +361,14 @@ public class Cripto extends javax.swing.JFrame {
 
     private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
         Carteira carteira = new Carteira();
+        carteira.setLocationRelativeTo(null); 
         carteira.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblCarteiraMouseClicked
 
     private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
         TelaUsuario telaUser = new TelaUsuario();
+        telaUser.setLocationRelativeTo(null);
         telaUser.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblHome1MouseClicked
@@ -390,6 +408,12 @@ public class Cripto extends javax.swing.JFrame {
         btnVenderCripto.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50,153,254), 1, false));
     }//GEN-LAST:event_btnVenderCriptoMouseExited
 
+    private void lblSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSairMouseClicked
+        Login l = new Login();
+        l.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblSairMouseClicked
+
    
     ControllerOperacoes cOperacoes;
     ControllerCripto c;
@@ -407,6 +431,7 @@ public class Cripto extends javax.swing.JFrame {
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
     private javax.swing.JLabel lblHome1;
+    private javax.swing.JLabel lblSair;
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JTable tblCriptos;
     private javax.swing.JTable tblCriptosUser;

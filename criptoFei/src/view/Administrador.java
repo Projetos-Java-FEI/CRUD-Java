@@ -335,7 +335,7 @@ public class Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_btnExcluirActionPerformed
 
     private void btnConsultarExtratoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarExtratoActionPerformed
-        // TODO add your handling code here:
+        c.getExtratoUsuario();
     }//GEN-LAST:event_btnConsultarExtratoActionPerformed
 
     private void btnExcluirCriptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCriptoActionPerformed

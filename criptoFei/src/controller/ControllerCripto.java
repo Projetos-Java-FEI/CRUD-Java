@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -24,7 +25,6 @@ public class ControllerCripto {
 
     public ControllerCripto() {
     }
-    
     
     
     public void carregarCriptos() {
