@@ -2,6 +2,7 @@ package controller;
 
 import DAO.Conexao;
 import DAO.DAO_Moeda;
+import DAO.DAO_Usuario;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import model.Moeda;
@@ -74,12 +76,13 @@ public class ControllerCripto {
         
     }
     
- public void compraCripto(JTable tblCripto) {
+public void compraCripto(JTable tblCripto) {
     int linhaSelecionada = tblCripto.getSelectedRow();
     Conexao c = new Conexao();
     try {
         Connection conn = c.getConnection();
         DAO_Moeda dao = new DAO_Moeda(conn);
+        DAO_Usuario validar = new DAO_Usuario(conn);
             
         if (linhaSelecionada != -1) {
             String simbolo = (String) tblCripto.getValueAt(linhaSelecionada, 0);
@@ -97,32 +100,46 @@ public class ControllerCripto {
             if (quantidadeStr != null && !quantidadeStr.isEmpty()) {
                 try {
                     double quantidade = Double.parseDouble(quantidadeStr);
-                    
                     double valorTotal = quantidade * cotacao;
 
-                    int confirmacao = JOptionPane.showConfirmDialog(
-                        null,
-                        "Você irá gastar R$ " + String.format("%.2f", valorTotal) + 
-                        " para comprar " + quantidade + " unidades de " + nome + ".\nDeseja continuar?",
-                        "Confirmar compra",
-                        JOptionPane.YES_NO_OPTION
-                    );
+                    // Solicita a senha do usuário
+                    JPasswordField senhaField = new JPasswordField(10);
+                    int senhaOption = JOptionPane.showConfirmDialog(null, senhaField, "Digite sua senha para confirmar a compra", JOptionPane.OK_CANCEL_OPTION);
+                    
+                    if (senhaOption == JOptionPane.OK_OPTION) {
+                        String senha = new String(senhaField.getPassword());
 
-                    if (confirmacao == JOptionPane.YES_OPTION) {
-                        Moeda moeda = new Moeda(simbolo, nome, cotacao);
-                        SessionManager sm = new SessionManager();
-                        String msg = dao.comprarMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
-                        view.atualizarCriptosUsuarios();
-                        view.atualizarCriptos();
-                        if(msg.startsWith("Erro")) {
-                            JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                        // Verifica a senha
+                        if (validar.verificarSenha(senha)) {
+                            int confirmacao = JOptionPane.showConfirmDialog(
+                                null,
+                                "Você irá gastar R$ " + String.format("%.2f", valorTotal) + 
+                                " para comprar " + quantidade + " unidades de " + nome + ".\nDeseja continuar?",
+                                "Confirmar compra",
+                                JOptionPane.YES_NO_OPTION
+                            );
+
+                            if (confirmacao == JOptionPane.YES_OPTION) {
+                                Moeda moeda = new Moeda(simbolo, nome, cotacao);
+                                SessionManager sm = new SessionManager();
+                                String msg = dao.comprarMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
+                                view.atualizarCriptosUsuarios();
+                                view.atualizarCriptos();
+                                
+                                if(msg.startsWith("Erro")) {
+                                    JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
+                                }                       
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Compra cancelada.");
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, "Compra realizada com sucesso!");
-                        }                       
+                            JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Compra cancelada.");
+                        JOptionPane.showMessageDialog(null, "Operação cancelada.");
                     }
-
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Quantidade inválida. Por favor, insira um número.");
                 }
@@ -137,13 +154,15 @@ public class ControllerCripto {
         e.printStackTrace();
     }
 }
+
  
- public void vendeCripto(JTable tblCripto) {
+public void vendeCripto(JTable tblCripto) {
     int linhaSelecionada = tblCripto.getSelectedRow();
     Conexao c = new Conexao();
     try {
         Connection conn = c.getConnection();
         DAO_Moeda dao = new DAO_Moeda(conn);
+        DAO_Usuario validar = new DAO_Usuario(conn);
             
         if (linhaSelecionada != -1) {
             String simbolo = (String) tblCripto.getValueAt(linhaSelecionada, 0);
@@ -161,34 +180,47 @@ public class ControllerCripto {
             if (quantidadeStr != null && !quantidadeStr.isEmpty()) {
                 try {
                     double quantidade = Double.parseDouble(quantidadeStr);
-                    
                     double valorTotal = quantidade * cotacao;
 
-                    int confirmacao = JOptionPane.showConfirmDialog(
-                        null,
-                        "Você irá receber R$ " + String.format("%.2f", valorTotal) + 
-                        " pela venda de " + quantidade + " unidades de " + nome + ".\nDeseja continuar?",
-                        "Confirmar compra",
-                        JOptionPane.YES_NO_OPTION
-                    );
+                    // Solicita a senha do usuário
+                    JPasswordField senhaField = new JPasswordField(10);
+                    int senhaOption = JOptionPane.showConfirmDialog(null, senhaField, "Digite sua senha para confirmar a venda", JOptionPane.OK_CANCEL_OPTION);
+                    
+                    if (senhaOption == JOptionPane.OK_OPTION) {
+                        String senha = new String(senhaField.getPassword());
 
-                    if (confirmacao == JOptionPane.YES_OPTION) {
-                        Moeda moeda = new Moeda(simbolo, nome, cotacao);
-                        SessionManager sm = new SessionManager();
-                        String msg = dao.venderMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
-                        view.atualizarCriptosUsuarios();
-                        view.atualizarCriptos();
-                        
-                        if(!msg.startsWith("Erro")) {
-                            JOptionPane.showMessageDialog(null, msg);  
+                        // Verifica a senha
+                        if (validar.verificarSenha(senha)) {
+                            int confirmacao = JOptionPane.showConfirmDialog(
+                                null,
+                                "Você irá receber R$ " + String.format("%.2f", valorTotal) + 
+                                " pela venda de " + quantidade + " unidades de " + nome + ".\nDeseja continuar?",
+                                "Confirmar venda",
+                                JOptionPane.YES_NO_OPTION
+                            );
+
+                            if (confirmacao == JOptionPane.YES_OPTION) {
+                                Moeda moeda = new Moeda(simbolo, nome, cotacao);
+                                SessionManager sm = new SessionManager();
+                                String msg = dao.venderMoeda(moeda, sm.getUser().getId(), new BigDecimal(quantidade));
+                                view.atualizarCriptosUsuarios();
+                                view.atualizarCriptos();
+                                
+                                if(!msg.startsWith("Erro")) {
+                                    JOptionPane.showMessageDialog(null, msg);  
+                                } else {
+                                    JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                                }
+                                
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Venda cancelada.");
+                            }
                         } else {
-                            JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Senha inválida.", "Erro", JOptionPane.ERROR_MESSAGE);
                         }
-                        
                     } else {
-                        JOptionPane.showMessageDialog(null, "Venda cancelada.");
+                        JOptionPane.showMessageDialog(null, "Operação cancelada.");
                     }
-
                 } catch (NumberFormatException e) {
                     JOptionPane.showMessageDialog(null, "Quantidade inválida. Por favor, insira um número.");
                 }
@@ -203,6 +235,7 @@ public class ControllerCripto {
         e.printStackTrace();
     }
 }
+
 
     
 }
