@@ -9,8 +9,6 @@ import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 import model.Moeda;
 import service.extratoService;
 import service.cotacaoService;

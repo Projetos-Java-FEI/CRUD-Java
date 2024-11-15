@@ -8,7 +8,6 @@ import DAO.DAO_Usuario;
 import DAO.DAO_Admin;
 import java.math.BigDecimal;
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import javax.swing.Box;
@@ -16,9 +15,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import model.User;
-import service.SessionManager;
-
 
 public class ControllerAdmin {
     private Administrador view;
@@ -54,13 +50,13 @@ public class ControllerAdmin {
     }
     
     public void adicionarMoeda() {
-        // Painel para entrada de dados da nova moeda
+        // painel para entrada de dados da nova moeda
         JPanel panel = new JPanel();
-        JTextField simboloField = new JTextField(10);  // Campo para o símbolo da moeda
-        JTextField nomeField = new JTextField(20);     // Campo para o nome da moeda
-        JTextField cotacaoField = new JTextField(10);  // Campo para a cotação da moeda
-        JTextField taxaCompraField = new JTextField(5); // Campo para a taxa de compra
-        JTextField taxaVendaField = new JTextField(5);  // Campo para a taxa de venda
+        JTextField simboloField = new JTextField(10); 
+        JTextField nomeField = new JTextField(20);    
+        JTextField cotacaoField = new JTextField(10);  
+        JTextField taxaCompraField = new JTextField(5); 
+        JTextField taxaVendaField = new JTextField(5);  
 
         panel.add(new JLabel("Símbolo:"));
         panel.add(simboloField);
@@ -80,7 +76,7 @@ public class ControllerAdmin {
         int option = JOptionPane.showConfirmDialog(null, panel, "Adicionar Moeda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            // Obtém e valida os dados inseridos pelo usuário
+            // obtém e valida os dados inseridos pelo usuário
             String simbolo = simboloField.getText().toUpperCase();
             String nome = nomeField.getText();
             BigDecimal cotacao;
@@ -98,8 +94,6 @@ public class ControllerAdmin {
                 return;
             }
 
-
-            // Conecta ao DAO e tenta adicionar a moeda
             Conexao conexao = new Conexao();
             try {
                 Connection conn = conexao.getConnection();
@@ -119,10 +113,10 @@ public class ControllerAdmin {
         }
     }
     public void excluirMoeda() {
-        // Painel para entrada do símbolo da moeda a ser excluída
+        // painel para entrada do símbolo da moeda a ser excluída
         JPanel panel = new JPanel();
-        JTextField simboloField = new JTextField(10);  // Campo para o símbolo da moeda
-        JPasswordField senhaField = new JPasswordField(10);  // Campo para a senha do usuário
+        JTextField simboloField = new JTextField(10);
+        JPasswordField senhaField = new JPasswordField(10);  
 
         panel.add(new JLabel("Símbolo da Moeda a Ser Excluída:"));
         panel.add(simboloField);
@@ -133,41 +127,31 @@ public class ControllerAdmin {
         int option = JOptionPane.showConfirmDialog(null, panel, "Excluir Moeda", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (option == JOptionPane.OK_OPTION) {
-            // Obtém o símbolo da moeda e a senha inseridos pelo usuário
-            String simbolo = simboloField.getText().toUpperCase();
-            String senha = new String(senhaField.getPassword());
-
-            // Criando o objeto User
-            User user = new User();
-            user.setCpf(SessionManager.getUser().getCpf());  // Recupera o CPF do usuário logado
-            user.setSenha(senha);  // Define a senha que foi inserida
-
-            // Criamos o objeto de conexão
             Conexao c = new Conexao();
 
             try {
-                // Fazendo a conexão com o banco
+                // fazendo a conexão com o banco
                 Connection conn = c.getConnection();
 
-                // Criando o DAO para verificar a senha
-                DAO_Usuario daoUsuario = new DAO_Usuario(conn);
-                ResultSet res = daoUsuario.verificarLogin(user);  // Verifica se a senha está correta
+                String simbolo = simboloField.getText().toUpperCase();
+                String senha = new String(senhaField.getPassword());
 
-                // Se a senha estiver correta
-                if (res.next()) {
-                    // Pergunta de confirmação antes de excluir a moeda
+                DAO_Usuario daoUsuario = new DAO_Usuario(conn);
+                
+                if (daoUsuario.verificarSenha(senha)) {
+                    // pergunta de confirmação antes de excluir a moeda
                     int confirm = JOptionPane.showConfirmDialog(null, 
                         "Tem certeza que deseja excluir a moeda " + simbolo + "?", 
                         "Confirmação de Exclusão", JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
 
                     if (confirm == JOptionPane.YES_OPTION) {
-                        // Chamando o método da classe DAO_Moeda para excluir a moeda
+                        // chamando o método para excluir a moeda
                         DAO_Moeda daoMoeda = new DAO_Moeda(conn);
-                        String msg = daoMoeda.excluirMoeda(simbolo);  // Exclusão da moeda
+                        String msg = daoMoeda.excluirMoeda(simbolo);  // exclusão da moeda
                         if (msg.startsWith("Erro")) {
                             JOptionPane.showMessageDialog(null, msg, "Erro", JOptionPane.ERROR_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null, msg);  // Mostra mensagem de sucesso ou erro
+                            JOptionPane.showMessageDialog(null, msg); 
                         }
                     } else {
                         JOptionPane.showMessageDialog(null, "Operação cancelada.");
@@ -196,7 +180,7 @@ public class ControllerAdmin {
             DAO_Moeda dao = new DAO_Moeda(conn);
             dao.atualizarCotacoes();
         } catch (SQLException e) {
-            e.printStackTrace();  // Exibe a mensagem de erro no console
+            e.printStackTrace();  // exibe a mensagem de erro no console
             JOptionPane.showMessageDialog(null, "Erro ao atualizar cotações: " + e.getMessage());
         }
     }
