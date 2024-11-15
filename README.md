@@ -47,4 +47,45 @@ Essa aplicação têm com foco oferecer uma interface de troca de criptomoedas t
 1. Clone este repositório.
 2. Compile o projeto.
 3. Certifique-se que o script do banco está atualizado.
-4. Execute o .jar
+4. Execute o .jar.
+
+---
+
+## Opcional: Testar o Banco de Dados com Docker
+
+### Requisitos
+- [Docker](https://www.docker.com/) e [Docker Compose](https://docs.docker.com/compose/) instalados.
+
+### Inicializar o Banco de Dados
+1. Navegue até o diretório `Docker-Banco`:  
+   ```bash
+   cd Docker-Banco
+2. Suba o container com o banco configurado:
+   ```bash
+   docker-compose up -d
+3. Verifique se o container está ativo:
+   ```bash
+   docker ps
+### Testar o Banco de Dados
+1. Acesse o banco via terminal:
+   ```bash
+   docker exec -it postgres_16 psql -U postgres -d CriptoFEI
+2. Conectar com o banco CriptoFEI:
+   Depois de acessar o banco, no próprio psql utilizar o comando
+   ```psql
+   \c CriptoFEI
+3. Realize consultas, por exemplo, listar as criptomoedas:
+   ```psql
+   SELECT * FROM criptos;
+### Encerrar o banco de dados
+1. Execute o seguinte comando para parar o container:
+   ```bash
+   docker-compose down
+### Observações
+- Certifique-se de que a porta `5432` esteja disponível em seu ambiente local.
+- Caso encontre problemas, abra uma *issue* neste repositório ou consulte a [documentação oficial do Docker](https://docs.docker.com/).
+
+
+
+
+
