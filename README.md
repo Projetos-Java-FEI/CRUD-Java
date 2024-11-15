@@ -1,162 +1,50 @@
-[https://excalidraw.com/#json=AiG6720xj1HsRhVjoXsvR,XszVlpz-nF5W5ycclkdM3g
+## CriptoFEI
 
+Bem-vindo ao projeto CriptoFEI! Esta aplicação foi desenvolvida em Java e SQL, como projeto para a matéria de Orientação à Objetos do 3o semestre de Ciência da Computação da FEI. <br>
+Essa aplicação têm com foco oferecer uma interface de troca de criptomoedas tanto para administradores quanto para usuários. O sistema permite que administradores gerenciem criptomoedas, visualizem extratos de clientes e criem novas criptomoedas. Os usuários podem adicionar reais à sua conta, comprar criptomoedas pré-programadas(BTC, ETH e XRP) ou aquelas criadas pelo Administrador. A aplicação também exibe gráficos para mostrar a divisão do saldo do usuário em diferentes criptomoedas.
 
-# Script do Banco de dados
--- Criação da tabela criptos com taxas de compra e venda separadas
-CREATE TABLE criptos (
-    simbolo VARCHAR(10) PRIMARY KEY,  
-    nome VARCHAR(50) NOT NULL,
-    cotacao DECIMAL(20, 8) NOT NULL,
-    taxa_compra DECIMAL(5, 2) NOT NULL,  -- Taxa de compra da criptomoeda
-    taxa_venda DECIMAL(5, 2) NOT NULL,   -- Taxa de venda da criptomoeda
-    last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+## Funcionalidades
 
--- Criação da tabela users
-CREATE TABLE users (
-    id_user SERIAL PRIMARY KEY,  -- Identificador único do usuário
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(11) UNIQUE NOT NULL,  -- CPF único
-    senha TEXT NOT NULL,  -- Senha do usuário
-    user_type VARCHAR(50) NOT NULL  -- Tipo de usuário (admin, comum, etc.)
-);
+### Para Administradores:
+- **Cadastrar Investidores**: Cadastrar novos investidores, com todos os dados necessários.
+- **Consultar Saldo**: Consultar os dados de algum investidor, tais como: nome, CPF, e os seus saldos.
+- **Excluir Investidores**: Excluir investidores desejados, usando o CPF do usuário e a senha de administrador.
+- **Visualizar Extratos de Clientes**: Ver o histórico de transações de todos os usuários e seus saldos.
+- **Gerenciar Criptomoedas**: Criar novas criptomoedas e definir suas propriedades (como nome, símbolo, cotação e taxas de compra e venda).
+- **Atualizar Cotação**: Administradores podem atualizar a cotação de forma aleatória (-5% até 5% por clique).
 
--- Nova estrutura da tabela carteira, com um registro por criptomoeda
-CREATE TABLE carteira (
-    id_carteira SERIAL PRIMARY KEY,  -- Identificador único da carteira
-    id_user INT NOT NULL,  -- Chave estrangeira que referencia a tabela users
-    simbolo VARCHAR(10) NOT NULL,  -- Símbolo da criptomoeda
-    saldo DECIMAL(20, 8) DEFAULT 0.0,  -- Saldo inicial definido para zero
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,  -- Exclusão em cascata com users
-    FOREIGN KEY (simbolo) REFERENCES criptos(simbolo) ON DELETE CASCADE  -- Exclusão em cascata com criptos
-);
+### Para Usuários:
+- **Depositar Reais**: Os usuários podem adicionar reais à sua conta, convertendo-os em saldo.
+- **Sacar Reais**: Os usuários podem sacar os reais de sua própria conta.
+- **Comprar Criptomoedas**: Comprar criptomoedas predefinidas ou as que foram criadas pelo administrador.
+- **Vender Criptomoedas**: Vender criptomoedas predefinidas ou as que foram criadas pelo administrador.
+- **Ver Extrato**: É possível ver o extrato de forma amigável e de fácil entendimento no menu carteira.
+- **Gráficos de Renda**: Visualizar gráficos de pizza mostrando a divisão do saldo do usuário entre as criptomoedas que ele possui.
+- **Senhas Criptografadas**: O sistema armazena senhas de usuários de forma segura, utilizando criptografia no banco de dados.
 
--- Atualização da tabela extrato com exclusão em cascata
-CREATE TABLE extrato (
-    id_extrato SERIAL PRIMARY KEY,  -- Identificador único do extrato
-    id_user INT NOT NULL,  -- Referência à tabela users
-    quantidade DECIMAL(20, 8) NOT NULL,  -- Quantidade de criptomoeda no extrato
-    operacao_reais VARCHAR(20) NOT NULL,
-    tipo_operacao VARCHAR(20) NOT NULL,  -- Tipo da operação (compra/venda, etc.)
-    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data da operação
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE  -- Exclusão em cascata com users
-);
+### Representação da tela da carteira do usuário: <br>
 
--- Criação da tabela historico_cripto
-CREATE TABLE historico_cripto (
-    id_historico SERIAL PRIMARY KEY,  -- Identificador único do histórico de cotação
-    simbolo VARCHAR(5) NOT NULL,  -- Símbolo da criptomoeda
-    cotacao DECIMAL(20, 8) NOT NULL,  -- Cotação da criptomoeda no momento do registro
-    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data e hora do registro da cotação
-    FOREIGN KEY (simbolo) REFERENCES criptos(simbolo) ON DELETE CASCADE  -- Relacionamento com a tabela criptos com CASCADE
-);
+![image](https://github.com/user-attachments/assets/d5d7a3ba-5f23-4074-bbd4-728f345bef73)
+<br>
+### Representação da tela de Administrador: <br>
+![image](https://github.com/user-attachments/assets/81aa5725-418c-413f-8344-e33bdc4fd777)
+<br>
+## Tecnologias Utilizadas
 
--- Índices para melhorar o desempenho nas consultas
-CREATE INDEX idx_users_cpf ON users(cpf);
-CREATE INDEX idx_criptos_simbolo ON criptos(simbolo);
-CREATE INDEX idx_extrato_id_user ON extrato(id_user);
-CREATE INDEX idx_historico_cripto_simbolo ON historico_cripto(simbolo);
-CREATE INDEX idx_carteira_user_simbolo ON carteira(id_user, simbolo);
+- **Java**: Linguagem de programação principal.
+- **Swing**: Biblioteca para construção da interface gráfica.
+- **JFreeChart**: Biblioteca para criar gráficos e visualizações.
+- **PostgreSQL**: Banco de dados utilizado para armazenar os dados de usuários, criptomoedas, transações e histórico das moedas.
+- **JBCrypt**: Para gerenciamento e criptografia de senhas.
 
--- Inserção das moedas fundamentais na tabela criptos com taxas de compra e venda
-INSERT INTO criptos (simbolo, nome, cotacao, taxa_compra, taxa_venda)
-VALUES
-('BTC', 'Bitcoin', 30000.00, 0.02, 0.015),  -- Exemplo de taxa de compra e venda
-('ETH', 'Ethereum', 2000.00, 0.02, 0.015),
-('XRP', 'Ripple', 0.50, 0.02, 0.015),
-('BRL', 'Reais', 1.00, 0.00, 0.00);  -- Real com taxa zero para compra e venda
+## Funcionalidades Extras
 
--- Inserção de usuários na tabela users
-INSERT INTO users (nome, cpf, senha, user_type)
-VALUES
-('Admin', '1', 'adm123', 'Administrador'),
-('dev', '2', 'dev123', 'Investidor');  
+- **Criptografia de Senhas**: Senhas dos usuários são armazenadas de forma segura no banco de dados usando criptografia.
+- **Interação em Tempo Real**: A interface gráfica se atualiza automaticamente ao realizar transações ou modificações na conta.
 
--- Inserção de saldos iniciais na tabela carteira para cada usuário criado
-INSERT INTO carteira (id_user, simbolo, saldo)
-VALUES
-(1, 'BTC', 0.0), (1, 'ETH', 0.0), (1, 'XRP', 0.0), (1, 'BRL', 0.0),  -- Carteira do usuário 'Admin'
-(2, 'BTC', 0.0), (2, 'ETH', 0.0), (2, 'XRP', 0.0), (2, 'BRL', 0.0);  -- Carteira do usuário 'dev'
+## Como Executar
 
-](https://excalidraw.com/#json=AiG6720xj1HsRhVjoXsvR,XszVlpz-nF5W5ycclkdM3g
-
-
-# Script do Banco de dados
--- Criação da tabela criptos com taxas de compra e venda separadas
-CREATE TABLE criptos (
-    simbolo VARCHAR(10) PRIMARY KEY,  
-    nome VARCHAR(50) NOT NULL,
-    cotacao DECIMAL(20, 8) NOT NULL,
-    taxa_compra DECIMAL(5, 2) NOT NULL,  -- Taxa de compra da criptomoeda
-    taxa_venda DECIMAL(5, 2) NOT NULL,   -- Taxa de venda da criptomoeda
-    last_update TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
--- Criação da tabela users
-CREATE TABLE users (
-    id_user SERIAL PRIMARY KEY,  -- Identificador único do usuário
-    nome VARCHAR(100) NOT NULL,
-    cpf VARCHAR(11) UNIQUE NOT NULL,  -- CPF único
-    senha TEXT NOT NULL,  -- Senha do usuário
-    user_type VARCHAR(50) NOT NULL  -- Tipo de usuário (admin, comum, etc.)
-);
-
--- Nova estrutura da tabela carteira, com um registro por criptomoeda
-CREATE TABLE carteira (
-    id_carteira SERIAL PRIMARY KEY,  -- Identificador único da carteira
-    id_user INT NOT NULL,  -- Chave estrangeira que referencia a tabela users
-    simbolo VARCHAR(10) NOT NULL,  -- Símbolo da criptomoeda
-    saldo DECIMAL(20, 8) DEFAULT 0.0,  -- Saldo inicial definido para zero
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE,  -- Exclusão em cascata com users
-    FOREIGN KEY (simbolo) REFERENCES criptos(simbolo) ON DELETE CASCADE  -- Exclusão em cascata com criptos
-);
-
--- Atualização da tabela extrato com exclusão em cascata
-CREATE TABLE extrato (
-    id_extrato SERIAL PRIMARY KEY,  -- Identificador único do extrato
-    id_user INT NOT NULL,  -- Referência à tabela users
-    quantidade DECIMAL(20, 8) NOT NULL,  -- Quantidade de criptomoeda no extrato
-    operacao_reais VARCHAR(20) NOT NULL,
-    tipo_operacao VARCHAR(20) NOT NULL,  -- Tipo da operação (compra/venda, etc.)
-    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data da operação
-    FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE CASCADE  -- Exclusão em cascata com users
-);
-
--- Criação da tabela historico_cripto
-CREATE TABLE historico_cripto (
-    id_historico SERIAL PRIMARY KEY,  -- Identificador único do histórico de cotação
-    simbolo VARCHAR(5) NOT NULL,  -- Símbolo da criptomoeda
-    cotacao DECIMAL(20, 8) NOT NULL,  -- Cotação da criptomoeda no momento do registro
-    data TIMESTAMP DEFAULT CURRENT_TIMESTAMP,  -- Data e hora do registro da cotação
-    FOREIGN KEY (simbolo) REFERENCES criptos(simbolo) ON DELETE CASCADE  -- Relacionamento com a tabela criptos com CASCADE
-);
-
--- Índices para melhorar o desempenho nas consultas
-CREATE INDEX idx_users_cpf ON users(cpf);
-CREATE INDEX idx_criptos_simbolo ON criptos(simbolo);
-CREATE INDEX idx_extrato_id_user ON extrato(id_user);
-CREATE INDEX idx_historico_cripto_simbolo ON historico_cripto(simbolo);
-CREATE INDEX idx_carteira_user_simbolo ON carteira(id_user, simbolo);
-
--- Inserção das moedas fundamentais na tabela criptos com taxas de compra e venda
-INSERT INTO criptos (simbolo, nome, cotacao, taxa_compra, taxa_venda)
-VALUES
-('BTC', 'Bitcoin', 30000.00, 0.02, 0.015),  -- Exemplo de taxa de compra e venda
-('ETH', 'Ethereum', 2000.00, 0.02, 0.015),
-('XRP', 'Ripple', 0.50, 0.02, 0.015),
-('BRL', 'Reais', 1.00, 0.00, 0.00);  -- Real com taxa zero para compra e venda
-
--- Inserção de usuários na tabela users
-INSERT INTO users (nome, cpf, senha, user_type)
-VALUES
-('Admin', '1', '$2a$10$tFjzacPdT0Tn4nBlCKodduMDW0cxgb3a/rUStmK9HYsEpFEu2tQim', 'Administrador'),
-('dev', '2', '$2a$10$3iX2Dmr946PVm9Wv4srrQuZtmDi5NVvfxp7KkUCAGAmkfj/6GsHNq', 'Investidor');
-  
-
--- Inserção de saldos iniciais na tabela carteira para cada usuário criado
-INSERT INTO carteira (id_user, simbolo, saldo)
-VALUES
-(1, 'BTC', 0.0), (1, 'ETH', 0.0), (1, 'XRP', 0.0), (1, 'BRL', 0.0),  -- Carteira do usuário 'Admin'
-(2, 'BTC', 0.0), (2, 'ETH', 0.0), (2, 'XRP', 0.0), (2, 'BRL', 0.0);  -- Carteira do usuário 'dev'
-
-)
+1. Clone este repositório.
+2. Compile o projeto.
+3. Certifique-se que o script do banco está atualizado.
+4. Execute o .jar
