@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import model.User;
 import org.mindrot.jbcrypt.BCrypt;
 import service.SessionManager;
@@ -241,6 +243,7 @@ public class DAO_Usuario {
         return listaExtrato; // retorna o arraylist com os valores do extrato
     }
     
+    
      public boolean autenticar(String cpf, String senhaInserida) throws SQLException {
         String sql = "SELECT senha FROM users WHERE cpf = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -261,6 +264,31 @@ public class DAO_Usuario {
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setString(1, user.getCpf());
         return statement.executeQuery();
+    }
+    
+    public static Map<String, Double> getSaldoCriptos(int idUser) throws SQLException {  
+        Map<String, Double> saldoTotal = new HashMap<>();
+        String sql = "SELECT c.simbolo, ca.saldo, c.cotacao " +
+                       "FROM carteira ca " +
+                       "JOIN criptos c ON ca.simbolo = c.simbolo " +
+                       "WHERE ca.id_user = ?";
+        
+        try (PreparedStatement stmt = new Conexao().getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, idUser);
+            ResultSet rs = stmt.executeQuery();
+            
+            while(rs.next()) {
+                String simbolo = rs.getString("simbolo");
+                double saldo = rs.getDouble("saldo");
+                double cotacao = rs.getDouble("cotacao");
+                double valorTotal = saldo * cotacao;
+                
+                saldoTotal.put(simbolo, valorTotal);
+        }
+            } catch(Exception e) {
+                    e.printStackTrace();
+            }
+        return saldoTotal;
     }
 
 

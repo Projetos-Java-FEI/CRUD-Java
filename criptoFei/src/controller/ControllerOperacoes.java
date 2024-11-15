@@ -2,9 +2,12 @@ package controller;
 
 import DAO.Conexao;
 import DAO.DAO_Usuario;
+import java.awt.Color;
+import java.awt.Font;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Map;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -14,6 +17,11 @@ import javax.swing.JTextField;
 import model.User;
 import service.SessionManager;
 import view.Carteira;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 
@@ -144,5 +152,47 @@ public void realizarDeposito(){
         return "inválido";
     }
     
+    public static void mostrarGrafico(int idUser, JPanel panel) throws SQLException {
+        Map<String, Double> saldoCripto = DAO_Usuario.getSaldoCriptos(idUser);
+        
+        DefaultPieDataset dataset = new DefaultPieDataset();
+        saldoCripto.forEach(dataset::setValue);
+        
+        JFreeChart chart = ChartFactory.createPieChart(
+            "Visão geral",
+            dataset,
+            true, 
+            true, 
+            false 
+        );
+        
+        PiePlot plot = (PiePlot) chart.getPlot();
+        plot.setOutlineVisible(false);
+        plot.setBackgroundPaint(new Color(63,63,63)); 
+        plot.setSectionPaint("BTC", Color.RED);
+        plot.setSectionPaint("ETH", Color.GREEN); 
+        plot.setSectionPaint("XRP", Color.YELLOW); 
+        plot.setSectionPaint("BRL", new Color(50,153,254));
+        chart.getTitle().setFont(new Font("SansSerif", Font.BOLD, 16));
+        chart.getTitle().setPaint(new Color(50,153,254));
+        chart.setBackgroundPaint(new Color(63,63,63));
+
+        plot.setLabelFont(new Font("SansSerif", Font.BOLD, 12));
+        plot.setLabelPaint(Color.WHITE);
+        plot.setLabelBackgroundPaint(null);
+        plot.setLabelOutlinePaint(null);
+        plot.setLabelShadowPaint(null);
+        
+        ChartPanel chartPanel = new ChartPanel(chart);
+        chartPanel.setSize(panel.getSize());
+        chartPanel.setVisible(true);
+        
+        panel.add(chartPanel);
+        panel.revalidate();
+        panel.repaint();
+    }
+
     
 }
+
+

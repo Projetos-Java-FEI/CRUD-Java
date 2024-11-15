@@ -3,6 +3,7 @@ package view;
 import controller.ControllerExtrato;
 import controller.ControllerOperacoes;
 import java.awt.Color;
+import java.sql.SQLException;
 import javax.swing.ImageIcon;
 import model.User;
 import javax.swing.JTable;
@@ -23,6 +24,13 @@ public class Carteira extends javax.swing.JFrame {
         
         lblSaldo.setText(c.getSaldo().toString());
         
+        try {
+            c.mostrarGrafico(SessionManager.getUser().getId(), panelDivisao);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        
+        
         this.getContentPane().setBackground(new Color(42,42,42));
         setIconImage(new ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png")).getImage());
     }
@@ -34,7 +42,6 @@ public class Carteira extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         lblCarteira = new javax.swing.JLabel();
-        lblHome1 = new javax.swing.JLabel();
         lblCripto = new javax.swing.JLabel();
         panelSaldo = new javax.swing.JPanel();
         btnTransferir = new javax.swing.JButton();
@@ -45,13 +52,12 @@ public class Carteira extends javax.swing.JFrame {
         lblCPF = new javax.swing.JLabel();
         btnSacar = new javax.swing.JButton();
         panelDivisao = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        btnConsultarSaldo = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblExtrato = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
+        lblSair = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -71,15 +77,6 @@ public class Carteira extends javax.swing.JFrame {
             }
         });
 
-        lblHome1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/home.png"))); // NOI18N
-        lblHome1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblHome1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblHome1MouseClicked(evt);
-            }
-        });
-
         lblCripto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency.png"))); // NOI18N
         lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -94,11 +91,9 @@ public class Carteira extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(366, 366, 366)
-                .addComponent(lblHome1)
-                .addGap(126, 126, 126)
+                .addGap(437, 437, 437)
                 .addComponent(lblCarteira)
-                .addGap(126, 126, 126)
+                .addGap(145, 145, 145)
                 .addComponent(lblCripto)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -108,7 +103,6 @@ public class Carteira extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblCripto)
-                    .addComponent(lblHome1)
                     .addComponent(lblCarteira))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -230,43 +224,15 @@ public class Carteira extends javax.swing.JFrame {
         panelDivisao.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         panelDivisao.setFont(new java.awt.Font("SansSerif", 0, 12)); // NOI18N
 
-        jLabel2.setForeground(new java.awt.Color(0, 0, 0));
-        jLabel2.setText("DIVISÃO DO DINHEIRO");
-
-        btnConsultarSaldo.setBackground(new java.awt.Color(42, 42, 42));
-        btnConsultarSaldo.setFont(new java.awt.Font("SansSerif", 1, 14)); // NOI18N
-        btnConsultarSaldo.setForeground(new java.awt.Color(50, 153, 254));
-        btnConsultarSaldo.setText("Saldo Total");
-        btnConsultarSaldo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50, 153, 254), 1, true));
-        btnConsultarSaldo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        btnConsultarSaldo.setFocusPainted(false);
-        btnConsultarSaldo.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnConsultarSaldoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelDivisaoLayout = new javax.swing.GroupLayout(panelDivisao);
         panelDivisao.setLayout(panelDivisaoLayout);
         panelDivisaoLayout.setHorizontalGroup(
             panelDivisaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 417, Short.MAX_VALUE)
         );
         panelDivisaoLayout.setVerticalGroup(
             panelDivisaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panelDivisaoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
-                .addComponent(btnConsultarSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGap(0, 214, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new java.awt.Color(63, 63, 63));
@@ -345,6 +311,14 @@ public class Carteira extends javax.swing.JFrame {
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/logoCriptoFei.png"))); // NOI18N
 
+        lblSair.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/botaoDesligar.png"))); // NOI18N
+        lblSair.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblSair.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblSairMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -353,7 +327,9 @@ public class Carteira extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(21, 21, 21)
                 .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(1004, 1004, 1004))
+                .addGap(958, 958, 958)
+                .addComponent(lblSair)
+                .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -367,7 +343,9 @@ public class Carteira extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3)
+                    .addComponent(lblSair))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -385,6 +363,8 @@ public class Carteira extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
     
+    
+        
     public void atualizarExtrato() {
         cExtrato.carregarExtrato();
     }
@@ -399,18 +379,13 @@ public class Carteira extends javax.swing.JFrame {
     
     
     
-    private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
-        TelaUsuario telaUser = new TelaUsuario();
-        telaUser.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lblHome1MouseClicked
-
     private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
 
     }//GEN-LAST:event_lblCarteiraMouseClicked
 
     private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
         Cripto cripto = new Cripto();
+        cripto.setLocationRelativeTo(null);
         cripto.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_lblCriptoMouseClicked
@@ -422,10 +397,6 @@ public class Carteira extends javax.swing.JFrame {
     private void btnSacarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSacarActionPerformed
         c.realizarSaque();
     }//GEN-LAST:event_btnSacarActionPerformed
-
-    private void btnConsultarSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarSaldoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnConsultarSaldoActionPerformed
 
     private void btnTransferirMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnTransferirMouseEntered
         btnTransferir.setBackground(new Color(50,153,254));
@@ -451,17 +422,21 @@ public class Carteira extends javax.swing.JFrame {
         btnSacar.setForeground(new Color(50,153,254));
         btnSacar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(50,153,254), 1, false));
     }//GEN-LAST:event_btnSacarMouseExited
+
+    private void lblSairMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblSairMouseClicked
+        Login l = new Login();
+        l.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblSairMouseClicked
     
                                         
 
     private ControllerExtrato cExtrato;
     private ControllerOperacoes c;
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnConsultarSaldo;
     private javax.swing.JButton btnSacar;
     private javax.swing.JButton btnTransferir;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -471,8 +446,8 @@ public class Carteira extends javax.swing.JFrame {
     private javax.swing.JLabel lblCPF;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
-    private javax.swing.JLabel lblHome1;
     private javax.swing.JLabel lblNome;
+    private javax.swing.JLabel lblSair;
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JPanel panelDivisao;
     private javax.swing.JPanel panelSaldo;

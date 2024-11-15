@@ -10,8 +10,8 @@ import model.User;
 import service.PasswordService;
 import service.SessionManager;
 import view.Administrador;
+import view.Carteira;
 import view.Login;
-import view.TelaUsuario;
 
 public class ControllerLogin {
     private Login view;
@@ -66,10 +66,12 @@ public class ControllerLogin {
                 if ("Administrador".equals(tipoUsuario)) {
                     Administrador telaAdm = new Administrador();
                     view.dispose();
+                    telaAdm.setLocationRelativeTo(null);
                     telaAdm.setVisible(true);
                 } else {
-                    TelaUsuario userTela = new TelaUsuario();
+                    Carteira userTela = new Carteira();
                     view.dispose();
+                    userTela.setLocationRelativeTo(null);
                     userTela.setVisible(true);
                 }
             } else {
