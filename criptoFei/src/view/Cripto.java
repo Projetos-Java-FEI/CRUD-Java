@@ -43,10 +43,6 @@ public class Cripto extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel2 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        lblCarteira = new javax.swing.JLabel();
-        lblHome1 = new javax.swing.JLabel();
-        lblCripto = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblCriptosUser = new javax.swing.JTable();
@@ -59,6 +55,9 @@ public class Cripto extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         lblSaldo = new javax.swing.JLabel();
         lblSair = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lblCarteira = new javax.swing.JLabel();
+        lblCripto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("CriptoFEI");
@@ -68,59 +67,6 @@ public class Cripto extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("SansSerif", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(102, 153, 255));
         jLabel2.setText("Criptos");
-
-        jPanel2.setBackground(new java.awt.Color(63, 63, 63));
-
-        lblCarteira.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCarteira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/wallet.png"))); // NOI18N
-        lblCarteira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblCarteira.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCarteiraMouseClicked(evt);
-            }
-        });
-
-        lblHome1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/home.png"))); // NOI18N
-        lblHome1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblHome1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblHome1MouseClicked(evt);
-            }
-        });
-
-        lblCripto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency.png"))); // NOI18N
-        lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblCripto.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblCriptoMouseClicked(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(366, 366, 366)
-                .addComponent(lblHome1)
-                .addGap(126, 126, 126)
-                .addComponent(lblCarteira)
-                .addGap(126, 126, 126)
-                .addComponent(lblCripto)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(26, 26, 26)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblCripto)
-                    .addComponent(lblHome1)
-                    .addComponent(lblCarteira))
-                .addContainerGap(26, Short.MAX_VALUE))
-        );
 
         jPanel1.setBackground(new java.awt.Color(63, 63, 63));
 
@@ -319,17 +265,57 @@ public class Cripto extends javax.swing.JFrame {
             }
         });
 
+        jPanel2.setBackground(new java.awt.Color(63, 63, 63));
+
+        lblCarteira.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCarteira.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/wallet.png"))); // NOI18N
+        lblCarteira.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblCarteira.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCarteiraMouseClicked(evt);
+            }
+        });
+
+        lblCripto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency.png"))); // NOI18N
+        lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblCripto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblCriptoMouseClicked(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(437, 437, 437)
+                .addComponent(lblCarteira)
+                .addGap(145, 145, 145)
+                .addComponent(lblCripto)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblCripto)
+                    .addComponent(lblCarteira))
+                .addContainerGap(26, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(83, 83, 83)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 189, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 178, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(100, 100, 100))
                     .addGroup(layout.createSequentialGroup()
@@ -337,6 +323,7 @@ public class Cripto extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lblSair)
                         .addGap(20, 20, 20))))
+            .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -352,29 +339,12 @@ public class Cripto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 137, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 96, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
-        Carteira carteira = new Carteira();
-        carteira.setLocationRelativeTo(null); 
-        carteira.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lblCarteiraMouseClicked
-
-    private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
-        TelaUsuario telaUser = new TelaUsuario();
-        telaUser.setLocationRelativeTo(null);
-        telaUser.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lblHome1MouseClicked
-
-    private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
-    }//GEN-LAST:event_lblCriptoMouseClicked
 
     private void btnComprarCriptoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnComprarCriptoActionPerformed
         c.compraCripto(getTblCriptos());
@@ -414,6 +384,20 @@ public class Cripto extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_lblSairMouseClicked
 
+    private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
+        Carteira c = new Carteira();
+        c.setLocationRelativeTo(null);
+        c.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblCarteiraMouseClicked
+
+    private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
+        Cripto cripto = new Cripto();
+        cripto.setLocationRelativeTo(null);
+        cripto.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_lblCriptoMouseClicked
+
    
     ControllerOperacoes cOperacoes;
     ControllerCripto c;
@@ -430,7 +414,6 @@ public class Cripto extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
-    private javax.swing.JLabel lblHome1;
     private javax.swing.JLabel lblSair;
     private javax.swing.JLabel lblSaldo;
     private javax.swing.JTable tblCriptos;

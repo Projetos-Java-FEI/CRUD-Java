@@ -42,7 +42,6 @@ public class Carteira extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         lblCarteira = new javax.swing.JLabel();
-        lblHome1 = new javax.swing.JLabel();
         lblCripto = new javax.swing.JLabel();
         panelSaldo = new javax.swing.JPanel();
         btnTransferir = new javax.swing.JButton();
@@ -78,15 +77,6 @@ public class Carteira extends javax.swing.JFrame {
             }
         });
 
-        lblHome1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHome1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/home.png"))); // NOI18N
-        lblHome1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        lblHome1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                lblHome1MouseClicked(evt);
-            }
-        });
-
         lblCripto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblCripto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagens/crypto-currency.png"))); // NOI18N
         lblCripto.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
@@ -101,11 +91,9 @@ public class Carteira extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(366, 366, 366)
-                .addComponent(lblHome1)
-                .addGap(126, 126, 126)
+                .addGap(437, 437, 437)
                 .addComponent(lblCarteira)
-                .addGap(126, 126, 126)
+                .addGap(145, 145, 145)
                 .addComponent(lblCripto)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -115,7 +103,6 @@ public class Carteira extends javax.swing.JFrame {
                 .addGap(26, 26, 26)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(lblCripto)
-                    .addComponent(lblHome1)
                     .addComponent(lblCarteira))
                 .addContainerGap(26, Short.MAX_VALUE))
         );
@@ -392,13 +379,6 @@ public class Carteira extends javax.swing.JFrame {
     
     
     
-    private void lblHome1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblHome1MouseClicked
-        TelaUsuario telaUser = new TelaUsuario();
-        telaUser.setLocationRelativeTo(null);
-        telaUser.setVisible(true);
-        this.dispose();
-    }//GEN-LAST:event_lblHome1MouseClicked
-
     private void lblCarteiraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCarteiraMouseClicked
 
     }//GEN-LAST:event_lblCarteiraMouseClicked
@@ -466,7 +446,6 @@ public class Carteira extends javax.swing.JFrame {
     private javax.swing.JLabel lblCPF;
     private javax.swing.JLabel lblCarteira;
     private javax.swing.JLabel lblCripto;
-    private javax.swing.JLabel lblHome1;
     private javax.swing.JLabel lblNome;
     private javax.swing.JLabel lblSair;
     private javax.swing.JLabel lblSaldo;
