@@ -1,7 +1,6 @@
 package view;
 
 import controller.ControllerLogin;
-import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;

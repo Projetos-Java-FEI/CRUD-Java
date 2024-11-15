@@ -5,7 +5,6 @@ import controller.ControllerOperacoes;
 import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JTable;
-import java.sql.SQLException;
 
 public class Cripto extends javax.swing.JFrame {
     
@@ -392,10 +391,6 @@ public class Cripto extends javax.swing.JFrame {
     }//GEN-LAST:event_lblCarteiraMouseClicked
 
     private void lblCriptoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblCriptoMouseClicked
-        Cripto cripto = new Cripto();
-        cripto.setLocationRelativeTo(null);
-        cripto.setVisible(true);
-        this.dispose();
     }//GEN-LAST:event_lblCriptoMouseClicked
 
    

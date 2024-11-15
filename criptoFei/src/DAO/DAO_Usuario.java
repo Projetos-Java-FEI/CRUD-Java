@@ -26,15 +26,6 @@ public class DAO_Usuario {
         this.conn = conn;
     }
     
-    public ResultSet verificarLogin(User user) throws SQLException {
-        String sql = "SELECT * FROM users WHERE cpf = ? AND senha = ?";
-        PreparedStatement statement = conn.prepareStatement(sql);
-        statement.setString(1, user.getCpf());
-        statement.setString(2, user.getSenha());
-        return statement.executeQuery();
-    }
-    
-
     public boolean verificarSenha(String senhaFornecida) throws SQLException {
         String sqlVerifySenha = "SELECT senha FROM users WHERE id_user = ?";
         try (PreparedStatement verifyStmt = conn.prepareStatement(sqlVerifySenha)) {
@@ -42,12 +33,12 @@ public class DAO_Usuario {
 
             try (ResultSet rs = verifyStmt.executeQuery()) {
                 if (rs.next()) {
-                    String senhaHash = rs.getString("senha"); // Recupera o hash da senha
-                    return BCrypt.checkpw(senhaFornecida, senhaHash); // Compara a senha fornecida com o hash
+                    String senhaHash = rs.getString("senha"); // recupera o hash da senha
+                    return BCrypt.checkpw(senhaFornecida, senhaHash); // compara a senha fornecida com o hash
                 }
             }
         }
-        return false; // Retorna falso se o usuário não foi encontrado ou se a senha está incorreta
+        return false; // retorna falso se o usuário não foi encontrado ou se a senha está incorreta
     }
 
 
@@ -57,14 +48,14 @@ public class DAO_Usuario {
         PreparedStatement statement = conn.prepareStatement(sqlInsertUser);
 
         try {
-            // Inserindo o usuário no banco de dados
+            // inserindo o usuário no banco de dados
             statement.setString(1, user.getNome());
             statement.setString(2, user.getCpf());
             statement.setString(3, user.getSenha());
             statement.setString(4, "Investidor");
             statement.executeUpdate();
 
-            // Obter o ID do usuário recém-criado
+            // obter o ID do usuário recém-criado
             int userId = getUserId(user.getCpf()); // método para obter o ID do usuário baseado no CPF
 
             String sqlInsertCarteira = "INSERT INTO carteira (id_user, simbolo, saldo) VALUES (?, ?, ?)";
@@ -158,7 +149,7 @@ public class DAO_Usuario {
 
 
 
-        // Método para obter o ID do usuário baseado no CPF
+    // Método para obter o ID do usuário baseado no CPF
     public int getUserId(String cpf) throws SQLException {
         String sqlSelectId = "SELECT id_user FROM users WHERE cpf = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sqlSelectId)) {
