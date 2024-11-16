@@ -163,6 +163,7 @@ public class DAO_Moeda {
     public String comprarMoeda(Moeda moeda, int idUser, BigDecimal quantidade) throws SQLException {
         BigDecimal valorCompra = quantidade.multiply(BigDecimal.valueOf(moeda.getCotacao()));
         BigDecimal taxaCompra = getTaxa(moeda.getSimbolo(), false);
+        System.out.println(taxaCompra);
         valorCompra = valorCompra.multiply(BigDecimal.ONE.add(taxaCompra));
         
 

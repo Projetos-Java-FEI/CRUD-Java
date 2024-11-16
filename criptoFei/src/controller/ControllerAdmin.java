@@ -7,6 +7,7 @@ import view.Administrador;
 import DAO.DAO_Usuario;
 import DAO.DAO_Admin;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -80,14 +81,15 @@ public class ControllerAdmin {
             String simbolo = simboloField.getText().toUpperCase();
             String nome = nomeField.getText();
             BigDecimal cotacao;
-            BigDecimal taxaCompra;
-            BigDecimal taxaVenda;
+            Double taxaCompra;
+            Double taxaVenda;
 
             try {
                 cotacao = new BigDecimal(cotacaoField.getText());
                
-                taxaCompra = new BigDecimal(taxaCompraField.getText());  
-                taxaVenda = new BigDecimal(taxaVendaField.getText()); 
+                taxaCompra = Double.parseDouble((taxaCompraField.getText()))/100; 
+               
+                taxaVenda = Double.parseDouble((taxaVendaField.getText()))/100; 
 
             } catch (NumberFormatException e) {
                 JOptionPane.showMessageDialog(null, "Valor inválido para cotação ou taxa.");
@@ -98,7 +100,7 @@ public class ControllerAdmin {
             try {
                 Connection conn = conexao.getConnection();
                 DAO_Moeda daoMoeda = new DAO_Moeda(conn);
-                String msg = daoMoeda.adicionarMoeda(simbolo, nome, cotacao, taxaCompra, taxaVenda);
+                String msg = daoMoeda.adicionarMoeda(simbolo, nome, cotacao,  new BigDecimal(taxaCompra), new BigDecimal(taxaVenda));
 
                 if (msg.startsWith("Moeda adicionada com sucesso")) {
                     JOptionPane.showMessageDialog(null, msg);
