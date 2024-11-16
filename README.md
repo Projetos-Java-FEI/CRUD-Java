@@ -85,6 +85,12 @@ Essa aplicação têm com foco oferecer uma interface de troca de criptomoedas t
 - Certifique-se de que a porta `5432` esteja disponível em seu ambiente local.
 - Caso encontre problemas, abra uma *issue* neste repositório ou consulte a [documentação oficial do Docker](https://docs.docker.com/).
 
+### Diagrama de Classes:
+![image](https://github.com/user-attachments/assets/69eee2ca-7a1c-42d7-be84-d292a8e5e412)
+<br>
+
+### Modelagem do Banco
+![image](https://github.com/user-attachments/assets/938ca3fb-7ff2-4e19-9074-bd48d4ec986a)
 
 
 
